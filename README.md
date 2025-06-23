@@ -1,1 +1,35 @@
-# maven-demo
+# maven-demo 向Maven中央仓库发布制品样例
+## settings.xml
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <servers>
+    <server>
+      <id>ossrh</id>
+      <username>xxx</username>
+      <password>xxx</password>
+    </server>
+  </servers>
+  
+  <profiles>
+    <profile>
+      <id>ossrh</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <gpg.executable>gpg</gpg.executable>
+        <gpg.passphrase>gpg解密密码</gpg.passphrase>
+      </properties>
+    </profile>
+  </profiles>
+......
+</settings>
+```
+
+## pom.xml详见工程
+
+## 发布命令
+mvn clean deploy
