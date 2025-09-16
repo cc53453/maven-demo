@@ -1,0 +1,156 @@
+# application.yaml - 示例（Spring Boot 风格）
+# 包含：MySQL / Redis / Kafka / RocketMQ / Nacos / ZooKeeper / Eureka
+
+spring:
+  application:
+    name: demo-service
+  profiles:
+    active: dev
+
+  # ========== MySQL（HikariCP） ==========
+  datasource:
+    url: jdbc:mysql://<mysql-host>:3306/<database>?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    username: test
+    password: pwd
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      pool-name: HikariPool-Demo
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  # ========== Redis ==========
+  redis:
+    host: localhost:7001
+    port: 6379
+    password: pwd
+    lettuce:
+      # 连接超时（毫秒）
+      command-timeout: 2000ms
+    timeout: 2000ms
+    database: 0
+
+  # ========== Kafka ==========
+  kafka:
+    properties: 
+      sasl: 
+        jaas: 'xxxxx required username="" password="pwd"'
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: demo-consumer-group
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        max.poll.records: 500
+        fetch.max.bytes: 52428800
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      retries: 3
+      acks: all
+      batch-size: 16384
+      buffer-memory: 33554432
+
+  # ========== RocketMQ ==========
+  rocketmq:
+    name-server: localhost:9876
+    producer:
+      secret-key: sk
+      access-key: ak
+      group: demo-producer-group
+      send-message-timeout: 3000
+    consumer:
+      secret-key: sk
+      access-key: ak
+      group: demo-consumer-group
+      consume-from-last-offset: false
+      enable-orderly: false
+
+  # ========== Nacos（配置中心 & 注册发现） ==========
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848
+        username: user
+        password: pwd
+        file-extension: yaml
+        timeout: 5000
+      discovery:
+        server-addr: localhost:8848
+        username: user
+        password: pwd
+        health-check-enabled: true
+
+    # ========== ZooKeeper（Spring Cloud ZooKeeper） ==========
+    zookeeper:
+      connect-string: localhost:2181
+      base-sleep-time-ms: 1000
+      max-retries: 3
+      session-timeout-ms: 60000
+      connection-timeout-ms: 15000
+
+  # ========== Eureka（Netflix Eureka） ==========
+eureka:
+  client:
+    service-url:
+      defaultZone: http://user:pwd@localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+    # 如果使用本地开发，可以禁用心跳/instance caching 等
+    registry-fetch-interval-seconds: 30
+  instance:
+    prefer-ip-address: false
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 90
+    metadata-map:
+      version: "1.0.0"
+
+# ========== 服务端口 / 应用元信息 ==========
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env
+  endpoint:
+    health:
+      show-details: always
+
+# ========== 日志（示例） ==========
+logging:
+  level:
+    root: INFO
+    com.example: DEBUG
+    org.springframework: INFO
+  file:
+    name: /var/log/${spring.application.name}.log
+
+# ========== 自定义应用配置示例 ==========
+app:
+  feature:
+    enable-some-feature: true
+  messaging:
+    default-topic: demo-topic
+    retry: 3
+  users: 
+  - name: 张三
+    age: 12
+    boy: true
+  - name: 李四
+    boy: false

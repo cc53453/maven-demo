@@ -1,0 +1,7 @@
+sm4:
+  iv: 123456789123456a
+  secret-key: 1234567891234567
+logging:
+  config: classpath:log4j2.xml
+test:
+  password: '{TODOSMS4}123456'
