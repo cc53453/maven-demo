@@ -19,12 +19,34 @@ import java.io.IOException;
  * yaml读写工具
  */
 @Slf4j
-public class YamlUtil {
+public final class YamlUtil {
+    /**
+     * 文件后缀
+     */
+    public static final String[] fileExtension = {".yaml", ".yml"};
     /**
      * 工具类，不支持实例化
      */
     private YamlUtil() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
+    
+    /**
+     * 通过文件名判断是否为yaml文件
+     * @param fileName 文件名
+     * @return 是返回true
+     */
+    public static boolean isYaml(String fileName) {
+        if(fileName == null) {
+            return false;
+        }
+        fileName = fileName.toLowerCase();
+        for(String extension:fileExtension) {
+            if(fileName.endsWith(extension)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     /**

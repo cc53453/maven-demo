@@ -14,12 +14,28 @@ import lombok.extern.slf4j.Slf4j;
  * properties文件读写工具
  */
 @Slf4j
-public class PropertiesUtil {
+public final class PropertiesUtil {
+    /**
+     * 文件后缀
+     */
+    public static final String fileExtension = ".properties";
     /**
      * 工具类，不支持实例化
      */
     private PropertiesUtil() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
+    
+    /**
+     * 通过文件名判断是否为properties文件
+     * @param fileName 文件名
+     * @return 是返回true
+     */
+    public static boolean isProperties(String fileName) {
+        if(fileName == null) {
+            return false;
+        }
+        return fileName.toLowerCase().endsWith(fileExtension);
     }
     
     /**

@@ -41,3 +41,4 @@ Desktop.ini
 .mvn/.gradle-enterprise/gradle-enterprise-workspace-id
 
 logs
+test-out

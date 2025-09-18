@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
  * 文件路径处理工具
  */
 @Slf4j
-public class FilePathUtil {
+public final class FilePathUtil {
     /**
      * 工具类，不支持实例化
      */

@@ -36,4 +36,10 @@ public class SM4Config {
     @NotBlank(message = "sm4.iv 不能为空")
     @Pattern(regexp = "^[a-zA-Z0-9]{16}$", message = "sm4.iv 必须是 16 位字母或数字")
     private String iv = "abcdef1234567890";
+    
+    /**
+     * 允许为空，主要是为了方便用户通过-Dsm4.need2encrypt-files-path传参告诉AutoEncryptLocalFile要加密哪些文件。
+     * 多个文件用,分割
+     */
+    private String need2encryptFilesPath;
 }

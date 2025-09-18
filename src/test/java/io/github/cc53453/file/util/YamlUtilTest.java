@@ -23,6 +23,7 @@ public class YamlUtilTest {
         assertEquals("********", 
                 json.get("spring").get("kafka").get("properties").get("sasl").get("jaas").asText());
         
-        YamlUtil.writeYaml(json, "test/test-out.yaml");
+        DirUtil.checkDir("test-out/");
+        YamlUtil.writeYaml(json, "test-out/test.yaml");
     }
 }

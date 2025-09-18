@@ -21,7 +21,8 @@ public class PropertiesUtilTest {
         props.put("spring.kafka.properties.sasl.jaas", "********");
         assertEquals("********", 
                 props.get("spring.kafka.properties.sasl.jaas"));
-        
-        PropertiesUtil.writeProperties("test/test-out.properties", props, "test");
+
+        DirUtil.checkDir("test-out/");
+        PropertiesUtil.writeProperties("test-out/test.properties", props, "test");
     }
 }
