@@ -10,9 +10,9 @@
   <artifactId>maven-demo</artifactId>
   <!-- 结尾为-SNAPSHOT自动推送快照库，否则推送release库。 
   推送release库需做审核，地址：https://central.sonatype.com/publishing/deployments -->
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <name>maven-demo</name>
-  <description>maven-demo</description>
+  <description>自定义的公共依赖库，包含一些我个人工作遇到的业务场景中认为可以抽象的公共逻辑</description>
   <url>https://github.com/cc53453/maven-demo</url>
 
   <!-- 你可以随便用这个软件，改它、卖它都可以，但记得保留我名字；出了问题别找我。 -->

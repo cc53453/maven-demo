@@ -9,7 +9,7 @@ spring:
 
   # ========== MySQL（HikariCP） ==========
   datasource:
-    url: jdbc:mysql://<mysql-host>:3306/<database>?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/test?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
     username: test
     password: pwd
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -154,3 +154,8 @@ app:
     boy: true
   - name: 李四
     boy: false
+    brother: 
+      - 王五
+      - 陈九
+app2: test
+      

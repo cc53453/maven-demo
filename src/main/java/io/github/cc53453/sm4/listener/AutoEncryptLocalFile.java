@@ -8,11 +8,13 @@ import java.util.Set;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import io.github.cc53453.datatype.util.JacksonJsonWalker;
 import io.github.cc53453.file.util.FilePathUtil;
 import io.github.cc53453.file.util.YamlUtil;
 import io.github.cc53453.sm4.annotation.EnableSm4Encrypt;
@@ -31,9 +33,10 @@ public class AutoEncryptLocalFile implements CommandLineRunner {
     /**
      * 获取注解中的filesPath，作为后续需要加密的文件
      * @param applicationContext spring容器上下文
+     * @param environment 环境/配置变量
      * @param sm4Encryptor 加密器
      */
-    public AutoEncryptLocalFile(ApplicationContext applicationContext, SM4Encryptor sm4Encryptor) {
+    public AutoEncryptLocalFile(ApplicationContext applicationContext, Environment environment, SM4Encryptor sm4Encryptor) {
         this.sm4Encryptor = sm4Encryptor;
 
         Map<String, Object> beansWithAnnotation = applicationContext.getBeansWithAnnotation(EnableSm4Encrypt.class);
@@ -46,6 +49,13 @@ public class AutoEncryptLocalFile implements CommandLineRunner {
                     EnableSm4Encrypt.class).filesPath());
             log.info("get filesPath: {} from class: {}", paths, beanName);
             filesPath.addAll(paths);
+        }
+        
+        // 再从配置/命令行参数里取
+        String extraPaths = environment.getProperty("sm4.need2encrypt-files-path");
+        if (extraPaths != null) {
+            log.info("get extraPaths: {} from environment", extraPaths);
+            filesPath.addAll(Arrays.asList(extraPaths.split(",")));
         }
     }
     
@@ -69,33 +79,22 @@ public class AutoEncryptLocalFile implements CommandLineRunner {
     }
     
     private void encrypt(JsonNode json) {
-        if (json.isObject()) {
-            ObjectNode objNode = (ObjectNode) json;
-            objNode.fields().forEachRemaining(entry -> {
-                JsonNode child = entry.getValue();
-                if (child.isTextual() && SM4Encryptor.
-                        needEncrypted(String.valueOf(child.asText()))) {
-                    needWrite = true;
-                    objNode.put(entry.getKey(), sm4Encryptor.encrypt(SM4Encryptor
-                            .getPlainTextWithoutPrefix(String.valueOf(child.asText()))));
-                } else {
-                    encrypt(child);
-                }
-            });
-        } 
-        else if (json.isArray()) {
-            ArrayNode arrNode = (ArrayNode) json;
-            for (int i = 0; i < arrNode.size(); i++) {
-                JsonNode child = arrNode.get(i);
-                if (child.isTextual() && SM4Encryptor.
-                        needEncrypted(String.valueOf(child.asText()))) {
-                    needWrite = true;
-                    arrNode.set(i, sm4Encryptor.encrypt(SM4Encryptor
-                            .getPlainTextWithoutPrefix(String.valueOf(child.asText()))));
-                } else {
-                    encrypt(child);
-                }
+        JacksonJsonWalker.walk(json, context->{
+            if(!SM4Encryptor.needEncrypted(context.getCurrentValue().asText())) {
+                return;
             }
-        }
+
+            needWrite = true;
+            if(context.isArrayElement()) {
+                ArrayNode arrNode = (ArrayNode)context.getParent();
+                arrNode.set(Integer.valueOf(context.getCurrentKey()), sm4Encryptor.encrypt(SM4Encryptor
+                        .getPlainTextWithoutPrefix(context.getCurrentValue().asText())));
+            }
+            else {
+                ObjectNode objNode = (ObjectNode)context.getParent();
+                objNode.put(context.getCurrentKey(), sm4Encryptor.encrypt(SM4Encryptor
+                        .getPlainTextWithoutPrefix(context.getCurrentValue().asText())));
+            }
+        });
     }
 }

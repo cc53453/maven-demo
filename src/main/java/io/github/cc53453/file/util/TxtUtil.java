@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
  * txt文件助手
  */
 @Slf4j
-public class TxtUtil {
+public final class TxtUtil {
     /**
      * 工具类，不支持实例化
      */
