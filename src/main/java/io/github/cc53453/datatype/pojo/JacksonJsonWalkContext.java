@@ -40,6 +40,9 @@ public class JacksonJsonWalkContext {
      * @return 如果是则返回true
      */
     public boolean isArrayElement() {
+        if(parent == null) {
+            return false;
+        }
         return parent.isArray();
     }
 }

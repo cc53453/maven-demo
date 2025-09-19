@@ -14,6 +14,9 @@ public class JacksonJsonWalkerTest {
     public void test() {
         JsonNode json = YamlUtil.loadYaml("test/test.yaml");
         JacksonJsonWalker.walk(json, context->{
+           if(context.getParent() == null) {
+               return;
+           }
            if(context.isArrayElement()) {
                Assertions.assertEquals(context.getParent().get(Integer.valueOf(context.getCurrentKey())), 
                        context.getCurrentValue());

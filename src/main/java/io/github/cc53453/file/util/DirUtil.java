@@ -47,7 +47,7 @@ public final class DirUtil {
     /**
      * 列出来目录下的文件，忽略子目录
      * @param dir 目录路径
-     * @return 文件名, 不带目录路径信息
+     * @return 文件
      */
     public static List<File> listFiles(String dir) {
         List<File> result = new ArrayList<>();
@@ -64,6 +64,32 @@ public final class DirUtil {
         for (File file : files) {
             // 如果是文件（排除子目录）
             if (file.isFile()) {
+                result.add(file);
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * 列出来目录下的子目录
+     * @param dir 目录路径
+     * @return 子目录
+     */
+    public static List<File> listDirs(String dir) {
+        List<File> result = new ArrayList<>();
+        // 创建 File 对象
+        File directory = new File(dir);
+
+        // 获取目录下所有的文件和子目录
+        File[] files = directory.listFiles();
+
+        if (files == null) {
+            return result;
+        }
+        // 遍历所有文件
+        for (File file : files) {
+            // 如果是文件（排除子目录）
+            if (file.isDirectory()) {
                 result.add(file);
             }
         }

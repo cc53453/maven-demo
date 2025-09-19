@@ -24,6 +24,7 @@ public class DefaultDesensitizeProcessor {
      */
     public DefaultDesensitizeProcessor(List<DesensitizeStrategy> strategies) {
         this.strategies = strategies;
+        log.info("followed strategies will be used: {}", strategies);
     }
     
     /**
@@ -40,8 +41,8 @@ public class DefaultDesensitizeProcessor {
             if(result.isApplied()) {
                 log.info("desensitizeStrategy applied, key: {}, newValue: {}, strategy: {}", 
                         key, result.getResult(), strategy.getClass());
-                return result.getResult();
             }
+            value = result.getResult();
         }
         return value;
     }
