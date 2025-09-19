@@ -90,10 +90,14 @@ public class SM4Encryptor implements StringEncryptor {
     }
 
     /**
-     * 解密
+     * 解密. 如果发现有{TODOSMS4}的前缀则只去掉前缀就返回
      */
     @Override
     public String decrypt(String encryptedMessage) {
+        if(needEncrypted(encryptedMessage)) {
+            return getPlainTextWithoutPrefix(encryptedMessage);
+        }
+        
         byte[] key = sm4Config.getSecretKey().getBytes(StandardCharsets.UTF_8);
         byte[] iv = sm4Config.getIv().getBytes(StandardCharsets.UTF_8);
         byte[] cipherTextBytes = Base64.getDecoder().decode(

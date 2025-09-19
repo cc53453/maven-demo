@@ -29,18 +29,24 @@ public class SM4EncryptablePropertyDetector implements EncryptablePropertyDetect
     }
     
     /**
-     * 是否加密
+     * 是否加密, 加密或者存在{TODOSMS4}标识前缀时为true，此时会调用解密方法。
      */
     @Override
     public boolean isEncrypted(String property) {
-        return (property != null && property.startsWith(ENCRYPT_PREFIX));
+        return (property != null && 
+                (property.startsWith(ENCRYPT_PREFIX) || 
+                        SM4Encryptor.needEncrypted(property)));
     }
 
     /**
      * isEncrypted为true时返回的配置值，这里把前缀去掉。
+     * 如果是{TODOSMS4}则不去掉前缀，直接在解密方法里再去掉前缀直接返回
      */
     @Override
     public String unwrapEncryptedValue(String property) {
+        if(SM4Encryptor.needEncrypted(property)) {
+            return property;
+        }
         return property.substring(ENCRYPT_PREFIX.length());
     }
 

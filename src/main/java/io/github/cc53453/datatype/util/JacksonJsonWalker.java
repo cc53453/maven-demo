@@ -1,7 +1,6 @@
 package io.github.cc53453.datatype.util;
 
 import java.util.Iterator;
-import java.util.Map;
 import java.util.function.Consumer;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -46,12 +45,13 @@ public final class JacksonJsonWalker {
 
     private static void walk(JsonNode node, String path, JsonNode parent, String currentKey, Consumer<JacksonJsonWalkContext> consumer) {
         if (node.isObject()) {
-            Iterator<Map.Entry<String, JsonNode>> fields = node.fields();
-            while (fields.hasNext()) {
-                Map.Entry<String, JsonNode> entry = fields.next();
-                String currentPath = path.isEmpty() ? entry.getKey() : 
-                    path.concat(PATH_SPLIT_BY).concat(entry.getKey());
-                walk(entry.getValue(), currentPath, node, entry.getKey(), consumer);
+            Iterator<String> fieldNames = node.fieldNames();
+            while (fieldNames.hasNext()) {
+                String key = fieldNames.next();
+                JsonNode value = node.get(key);
+                String currentPath = path.isEmpty() ? key : 
+                    path.concat(PATH_SPLIT_BY).concat(key);
+                walk(value, currentPath, node, key, consumer);
             }
         }
         else if (node.isArray()) {
