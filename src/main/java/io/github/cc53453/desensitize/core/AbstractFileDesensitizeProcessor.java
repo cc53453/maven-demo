@@ -28,6 +28,9 @@ public abstract class AbstractFileDesensitizeProcessor<T> {
     public final void process(String path) {
         log.info("start for file desensitize: {}", path);
         T data = readFile(path);
+        if(data == null) {
+            log.error("readFile get null, skip {}!", path);
+        }
         traverseAndDesensitize(data);
         writeFile(data, path);
         log.info("end for file desensitize: {}", path);

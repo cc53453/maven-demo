@@ -31,7 +31,7 @@ public final class ZipUtil {
      * @param fileName 文件名
      * @return 是返回true
      */
-    public boolean isZip(String fileName) {
+    public static boolean isZip(String fileName) {
         if(fileName == null) {
             return false;
         }
