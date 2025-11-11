@@ -5,3 +5,10 @@ logging:
   config: classpath:log4j2.xml
 test:
   password: '{TODOSMS4}123456'
+jfrog:
+  artifactorys:
+    - name: dev
+      artifactory-url: http://localhost:8081/artifactory
+      username: admin
+      password: '{SMS4}tj0bXM94DkpxYp76vUiBJw=='
+      

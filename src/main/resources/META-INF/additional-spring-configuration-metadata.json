@@ -1,5 +1,9 @@
-{"properties": [{
-  "name": "test.password",
-  "type": "java.lang.String",
-  "description": "配置文件密码自动加解密测试"
-}]}
+{
+	"properties": [
+		{
+			"name": "test.password",
+			"type": "java.lang.String",
+			"description": "配置文件密码自动加解密测试"
+		}
+	]
+}
