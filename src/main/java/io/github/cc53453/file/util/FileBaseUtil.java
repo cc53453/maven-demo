@@ -1,11 +1,16 @@
 package io.github.cc53453.file.util;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HexFormat;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -72,5 +77,35 @@ public final class FileBaseUtil {
         } catch (IOException e) {
             log.error("copy {} to {} error, maybe src not exist", src, tgt);
         }
+    }
+    
+    private static String calcChecksum(File file, String algorithm) throws IOException, NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance(algorithm);
+
+        try (FileInputStream fis = new FileInputStream(file);
+             DigestInputStream dis = new DigestInputStream(fis, digest)) {
+
+            byte[] buffer = new byte[8192];
+            // 读取文件数据并更新digest
+            while (dis.read(buffer) != -1) {
+                // 自动更新digest
+            }
+        }
+
+        byte[] hash = digest.digest();
+        // Java 17+ 可用 HexFormat
+        return HexFormat.of().formatHex(hash);
+    }
+
+    public static String sha1(File file) throws IOException, NoSuchAlgorithmException {
+        return calcChecksum(file, "SHA-1");
+    }
+
+    public static String sha256(File file) throws IOException, NoSuchAlgorithmException {
+        return calcChecksum(file, "SHA-256");
+    }
+
+    public static String md5(File file) throws IOException, NoSuchAlgorithmException {
+        return calcChecksum(file, "MD5");
     }
 }
