@@ -6,6 +6,7 @@ import io.github.cc53453.sm4.annotation.EnableSm4Encrypt;
 import java.util.Map;
 
 import org.jasypt.encryption.StringEncryptor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportAware;
@@ -36,7 +37,7 @@ public class AutoEncryptConfiguration implements ImportAware {
     @Bean
     AutoEncryptLocalFile autoEncryptLocalFile(
             Environment environment,
-            StringEncryptor sm4Encryptor) {
+            @Qualifier("jasyptStringEncryptor") StringEncryptor sm4Encryptor) {
         return new AutoEncryptLocalFile(filesPath, environment, sm4Encryptor);
     }
 

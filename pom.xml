@@ -3,14 +3,14 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.5.6</version>
+    <version>3.5.7</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>io.github.cc53453</groupId>
   <artifactId>maven-demo</artifactId>
   <!-- 结尾为-SNAPSHOT自动推送快照库，否则推送release库。 
   推送release库需做审核，地址：https://central.sonatype.com/publishing/deployments -->
-  <version>1.0.6</version>
+  <version>1.1.0</version>
   <name>maven-demo</name>
   <description>自定义的公共依赖库，包含一些我个人工作遇到的业务场景中认为可以抽象的公共逻辑</description>
   <url>https://github.com/cc53453/maven-demo</url>
