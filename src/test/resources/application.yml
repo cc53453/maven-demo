@@ -5,3 +5,17 @@ logging:
   config: classpath:log4j2.xml
 test:
   password: '{TODOSMS4}123456'
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/
+    username: demo
+    password: '{TODOSMS4}123456'
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+mybatis-plus:
+  mapper-locations:
+  - classpath:mapper/*.xml
+  type-aliases-package: io.github.cc53453
+  configuration:
+    map-underscore-to-camel-case: true
