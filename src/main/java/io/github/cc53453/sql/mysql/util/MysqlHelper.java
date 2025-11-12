@@ -3,6 +3,7 @@ package io.github.cc53453.sql.mysql.util;
 import com.baomidou.mybatisplus.annotation.TableField;
 
 import io.github.cc53453.datatype.util.ClassReflectHelper;
+import io.github.cc53453.datatype.util.StringHelper;
 import io.github.cc53453.date.util.DateUtil;
 
 import java.lang.reflect.Field;
@@ -55,7 +56,7 @@ public class MysqlHelper {
                 columns.add(column);
                 if (value instanceof String || value instanceof Character) {
                     // 字符串本身如果有单引号，需转义
-                    values.add(String.format("'%s'", value.toString().replace("'", "''")));
+                    values.add(String.format("'%s'", StringHelper.escapeMySqlString(String.valueOf(value))));
                 } else if (value instanceof Boolean) {
                     // true为1
                     values.add((Boolean) value ? "1" : "0");

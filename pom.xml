@@ -10,7 +10,7 @@
   <artifactId>maven-demo</artifactId>
   <!-- 结尾为-SNAPSHOT自动推送快照库，否则推送release库。 
   推送release库需做审核，地址：https://central.sonatype.com/publishing/deployments -->
-  <version>1.0.7</version>
+  <version>1.0.8</version>
   <name>maven-demo</name>
   <description>自定义的公共依赖库，包含一些我个人工作遇到的业务场景中认为可以抽象的公共逻辑</description>
   <url>https://github.com/cc53453/maven-demo</url>
@@ -124,11 +124,6 @@
             <artifactId>mockito-inline</artifactId>
           </exclusion>
         </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.mysql</groupId>
-      <artifactId>mysql-connector-j</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
   
