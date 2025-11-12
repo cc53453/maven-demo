@@ -23,6 +23,10 @@ public final class DateUtil {
      * 年份-月份-日期T小时:分钟:秒.毫秒+时区如08:00
      */
     public static final String FORMAT_YYYY_MM_DD_T_HH_MM_SS_SSSXXX = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+    /**
+     * 年份-月份-日期 小时:分钟:秒
+     */
+    public static final String FORMAT_YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
     
     /**
      * 工具类，不支持实例化
