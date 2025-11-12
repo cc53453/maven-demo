@@ -2,16 +2,20 @@ package io.github.cc53453.sm4.core;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import io.github.cc53453.Main;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.jasypt.encryption.StringEncryptor;
+
 @SpringBootTest(classes = Main.class)
 public class SM4EncryptorTest {
     @Autowired
-    private SM4Encryptor sm4;
+    @Qualifier("jasyptStringEncryptor")
+    private StringEncryptor sm4;
 
     @Autowired
     private SM4EncryptablePropertyDetector sm4EncryptablePropertyDetector;
