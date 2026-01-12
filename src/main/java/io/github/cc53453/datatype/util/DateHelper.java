@@ -1,4 +1,4 @@
-package io.github.cc53453.date.util;
+package io.github.cc53453.datatype.util;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
  * 时间工具类
  */
 @Slf4j
-public final class DateUtil {
+public final class DateHelper {
     /**
      * 年份-月份-日期
      */
@@ -31,7 +31,7 @@ public final class DateUtil {
     /**
      * 工具类，不支持实例化
      */
-    private DateUtil() {
+    private DateHelper() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
     

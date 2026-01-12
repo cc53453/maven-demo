@@ -3,8 +3,8 @@ package io.github.cc53453.sql.mysql.util;
 import com.baomidou.mybatisplus.annotation.TableField;
 
 import io.github.cc53453.datatype.util.ClassReflectHelper;
+import io.github.cc53453.datatype.util.DateHelper;
 import io.github.cc53453.datatype.util.StringHelper;
-import io.github.cc53453.date.util.DateUtil;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -30,7 +30,7 @@ public class MysqlHelper {
      * @param entity      实体类实例
      * @param tableName   表名
      * @param entityClass 实体类Class对象
-     * @param dateFormatStr 时间格式，null时默认 {@link io.github.cc53453.date.util.DateUtil#FORMAT_YYYY_MM_DD_HH_MM_SS}
+     * @param dateFormatStr 时间格式，null时默认 {@link io.github.cc53453.datatype.util.DateHelper#FORMAT_YYYY_MM_DD_HH_MM_SS}
      * @return insert的sql语句
      */
     public static <T> String mybatisEntityToInsertSql(T entity, String tableName, Class<T> entityClass, String dateFormatStr) {
@@ -40,7 +40,7 @@ public class MysqlHelper {
         sb.append("INSERT INTO ").append(tableName).append(" (");
         valuesSb.append("VALUES (");
         SimpleDateFormat sdf = dateFormatStr == null ? new SimpleDateFormat(
-                DateUtil.FORMAT_YYYY_MM_DD_HH_MM_SS) : new SimpleDateFormat(dateFormatStr);
+                DateHelper.FORMAT_YYYY_MM_DD_HH_MM_SS) : new SimpleDateFormat(dateFormatStr);
         
         List<String> columns = new ArrayList<>();
         List<String> values = new ArrayList<>();

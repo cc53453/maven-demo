@@ -1,0 +1,1 @@
+ALTER TABLE `demo` ADD COLUMN `age` int(11) NULL;

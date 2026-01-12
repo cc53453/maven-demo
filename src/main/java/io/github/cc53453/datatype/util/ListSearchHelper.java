@@ -11,6 +11,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.util.Assert;
 
+/**
+ * list搜索工具，目前支持根据多个索引的等值and搜索.
+ * @param <T> Model类型
+ * @version 1.0.0
+ */
 public class ListSearchHelper<T> {
     /** 
      * 原始数据 
@@ -60,6 +65,10 @@ public class ListSearchHelper<T> {
     /**
      * 为某个字段建立索引
      * 必须在 get() 之前调用
+     * @param <K> keyExtractor方法的返回
+     * @param indexName index名称
+     * @param keyExtractor 成员变量的get方法
+     * @return {@link ListSearchHelper}
      */
     public <K> ListSearchHelper<T> index(String indexName, Function<T, K> keyExtractor) {
         Assert.notNull(keyExtractor, "keyExtractor must not be null");
@@ -76,6 +85,10 @@ public class ListSearchHelper<T> {
 
     /**
      * 等值 AND 查询
+     * @param <K> 成员变量的类型
+     * @param indexName index名称
+     * @param value 成员变量的目标值
+     * @return {@link ListSearchHelper}
      */
     public <K> ListSearchHelper<T> get(String indexName, K value) {
         Map<Object, Set<T>> index = indexes.get(indexName);

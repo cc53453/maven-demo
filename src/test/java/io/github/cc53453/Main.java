@@ -19,7 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 @EnableSm4Encrypt(filesPath = {"classpath:application.yml"})
 @SpringBootApplication
 @Slf4j
-@EnableAutoConfiguration(exclude = {MybatisPlusAutoConfiguration.class, DataSourceAutoConfiguration.class})
+@EnableAutoConfiguration
+//@EnableAutoConfiguration(exclude = {MybatisPlusAutoConfiguration.class, DataSourceAutoConfiguration.class})
 public class Main implements CommandLineRunner {
     @Value("${test.password:demo}")
     String testPassword;

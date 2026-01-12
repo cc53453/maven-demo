@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 
-import io.github.cc53453.date.util.DateUtil;
+import io.github.cc53453.datatype.util.DateHelper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MysqlHelperTest {
     @Test
     public void test() throws NoSuchFieldException, IllegalAccessException {
-        SimpleDateFormat sdf = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD_HH_MM_SS);
+        SimpleDateFormat sdf = new SimpleDateFormat(DateHelper.FORMAT_YYYY_MM_DD_HH_MM_SS);
         TestEntity test1 = new TestEntity();
         test1.setId(1L);
         test1.setName("test1");
