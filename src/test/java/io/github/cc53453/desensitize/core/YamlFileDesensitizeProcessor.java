@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class YamlFileDesensitizeProcessor extends AbstractFileDesensitizeProcessor<JsonNode> {
 
-    protected YamlFileDesensitizeProcessor(DefaultDesensitizeProcessor desensitizeProcessor, DefaultDesensitizeProcessor defaultDesensitizeProcessor) {
+    protected YamlFileDesensitizeProcessor(DefaultDesensitizeProcessor desensitizeProcessor) {
         super(desensitizeProcessor);
     }
 

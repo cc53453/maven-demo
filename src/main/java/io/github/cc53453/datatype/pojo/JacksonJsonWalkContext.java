@@ -16,7 +16,7 @@ public class JacksonJsonWalkContext {
     /**
      * 默认的构造函数
      */
-    public JacksonJsonWalkContext() {}
+    public JacksonJsonWalkContext() {} // NOSONAR
     /**
      * 完整路径，比如app.application[0].name
      */

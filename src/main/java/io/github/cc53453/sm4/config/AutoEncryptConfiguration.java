@@ -21,7 +21,7 @@ public class AutoEncryptConfiguration implements ImportAware {
     /**
      * 默认构造函数，由 Spring 自动调用
      */
-    public AutoEncryptConfiguration() {}
+    public AutoEncryptConfiguration() {} // NOSONAR
     
     /**
      * 注解中的filesPath

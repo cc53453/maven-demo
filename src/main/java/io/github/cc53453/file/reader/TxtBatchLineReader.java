@@ -40,7 +40,8 @@ public class TxtBatchLineReader implements Closeable {
      */
     public List<String> next(int charLimit) throws IOException {
         if(lastLine == null || charLimit <= 0) {
-            return null;
+            // 这里故意返回null，防止调用时循环退出条件写的不对导致死循环
+            return null; // NOSONAR
         }
         
         int totalChars = 0;
@@ -57,20 +58,18 @@ public class TxtBatchLineReader implements Closeable {
 
         String line = null;
         while ((line = reader.readLine()) != null) {
-            if(line.isBlank()) {
-                continue;
+            if(!line.isBlank()) {
+                // 还要算上换行符的1位
+                int len = line.getBytes(StandardCharsets.UTF_8).length + LINE_BREAK_BYTES_LENGTH;
+    
+                if (totalChars + len > charLimit) {
+                    // 当前行超出限制，不读取，留给下次
+                    break;
+                }
+    
+                result.add(line);
+                totalChars += len;
             }
-            
-            // 还要算上换行符的1位
-            int len = line.getBytes(StandardCharsets.UTF_8).length + LINE_BREAK_BYTES_LENGTH;
-
-            if (totalChars + len > charLimit) {
-                // 当前行超出限制，不读取，留给下次
-                break;
-            }
-
-            result.add(line);
-            totalChars += len;
         }
 
         // 记录本次读到的最后一行，下次要带上本行

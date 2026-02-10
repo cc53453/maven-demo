@@ -17,13 +17,13 @@ public class JasyptConfiguration {
     /**
      * 默认构造函数，由 Spring 自动调用
      */
-    public JasyptConfiguration() {}
+    public JasyptConfiguration() {} // NOSONAR
     
     //这里的名字必须是jasyptStringEncryptor,不能改动
     @Bean(name = "jasyptStringEncryptor")
     @ConditionalOnMissingBean
-    StringEncryptor stringEncryptor(SM4EncryptablePropertyDetector propertyDetector){
-        return new SM4Encryptor();
+    StringEncryptor stringEncryptor(SM4EncryptablePropertyDetector propertyDetector, SM4Config sm4Config){
+        return new SM4Encryptor(sm4Config);
     }
 
     //这里的名字必须是encryptablePropertyDetector,不能改动

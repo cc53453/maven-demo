@@ -1,4 +1,4 @@
-package io.github.cc53453.sql.undoflyway.util;
+package io.github.cc53453.sql.undoflyway.core;
 
 import java.io.File;
 import java.sql.Connection;
@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 import io.github.cc53453.file.util.DirUtil;
 import io.github.cc53453.file.util.FilePathUtil;
 import io.github.cc53453.sql.undoflyway.config.UndoFlywayConfig;
+import io.github.cc53453.sql.undoflyway.enums.DatasourceType;
+import io.github.cc53453.sql.undoflyway.util.UndoFlywayHelper;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -62,11 +64,9 @@ public class RollbackExecutor {
     }
     
     private UndoFlywayHelper getHelper() {
-        switch(undoFlywayConfig.getDatasourceType()) {
-        case MYSQL: 
+        if(DatasourceType.MYSQL.equals(undoFlywayConfig.getDatasourceType())) {
             return new io.github.cc53453.sql.mysql.util.UndoFlywayHelperImpl();
-        default: 
-            throw new java.lang.IllegalArgumentException("unsupported database type");
         }
+        throw new java.lang.IllegalArgumentException("unsupported database type");
     }
 }

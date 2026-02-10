@@ -20,20 +20,22 @@ public class IpDesensitizeUtil {
     /**
      *  匹配 IPv4
      */
-    public static final Pattern IPV4_PATTERN = Pattern.compile(
-            "(25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)\\." +
-                    "(25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)\\." +
-                    "(25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)\\." +
-                    "(25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)"
-                );
-    
+    private static final Pattern IPV4_PATTERN =
+            Pattern.compile("\\b(\\d{1,3}\\.){3}\\d{1,3}\\b");
+
     /**
      * 是否包含ip
      * @param text 字符串
      * @return 包含ip则返回true
      */
     public static boolean hasIpv4(String text) {
-        return IPV4_PATTERN.matcher(text).find();
+        Matcher matcher = IPV4_PATTERN.matcher(text);
+        while (matcher.find()) {
+            if (isValidIpv4(matcher.group())) {
+                return true;
+            }
+        }
+        return false;
     }
     
     /**
@@ -45,11 +47,41 @@ public class IpDesensitizeUtil {
         Matcher matcher = IPV4_PATTERN.matcher(text);
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
-            // 取出四段
-            String masked = matcher.group(1) + ".*.*." + matcher.group(4);
-            matcher.appendReplacement(sb, masked);
+            String ip = matcher.group();
+            if (isValidIpv4(ip)) {
+                matcher.appendReplacement(sb, maskSingleIpv4(ip));
+            } else {
+                // 非法 IP 原样保留
+                matcher.appendReplacement(sb, ip);
+            }
         }
         matcher.appendTail(sb);
         return sb.toString();
+    }
+
+    /**
+     * 校验 IPv4 每段是否 0-255
+     * @param ip 单个ip
+     * @return 是合法ip则返回true
+     */
+    private static boolean isValidIpv4(String ip) {
+        String[] parts = ip.split("\\.");
+        for (String part : parts) {
+            int n = Integer.parseInt(part);
+            if (n < 0 || n > 255) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 单个 IPv4 脱敏
+     * @param ip 单个ip
+     * @return 中间两位数字脱敏成*
+     */
+    private static String maskSingleIpv4(String ip) {
+        String[] parts = ip.split("\\.");
+        return parts[0] + ".*.*." + parts[3];
     }
 }

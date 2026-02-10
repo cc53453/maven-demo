@@ -19,7 +19,7 @@ public class UndoFlywayConfig {
     /**
      * 默认构造函数，由 Spring 自动调用
      */
-    public UndoFlywayConfig() {}
+    public UndoFlywayConfig() {} //NOSONAR
 
     /**
      * 回退脚本的类路径

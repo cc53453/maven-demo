@@ -19,7 +19,7 @@ public final class FilePathUtil {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
     
-    private final static String CLASSPATH_PREFIX = "classpath:";
+    private static final String CLASSPATH_PREFIX = "classpath:";
     
     /**
      * 判断path是否类路径形式

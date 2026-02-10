@@ -33,11 +33,10 @@ public class ClassReflectHelper {
                     return pd.getReadMethod().invoke(entity);
                 }
             }
-            // 如果找不到 getter，再 fallback 到直接访问字段
-            field.setAccessible(true);
-            return field.get(entity);
+            // 如果找不到 getter，则抛错
+            throw new IllegalArgumentException("there's no get method for field " + field.getName());
         } catch (Exception e) {
-            throw new RuntimeException("Failed to get value for field " + field.getName(), e);
+            throw new IllegalArgumentException("Failed to get value for field " + field.getName(), e);
         }
     }
 }

@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -18,7 +22,7 @@ public final class ZipUtil {
     /**
      * 文件后缀
      */
-    public static final String fileExtension = ".zip";
+    public static final String FILE_EXTENSION = ".zip";
     /**
      * 工具类，不支持实例化
      */
@@ -35,7 +39,7 @@ public final class ZipUtil {
         if(fileName == null) {
             return false;
         }
-        return fileName.toLowerCase().endsWith(fileExtension);
+        return fileName.toLowerCase().endsWith(FILE_EXTENSION);
     }
     
     /**
@@ -44,33 +48,40 @@ public final class ZipUtil {
      * @param destDir 解压到的目标目录
      */
     public static void unzip(String zipFilePath, String destDir) {
-        File dir = new File(destDir);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
+        Path destDirPath = Paths.get(destDir).toAbsolutePath().normalize();
+
         try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFilePath))) {
             ZipEntry entry;
             byte[] buffer = new byte[4096];
+
             while ((entry = zis.getNextEntry()) != null) {
-                File newFile = new File(destDir, entry.getName());
+                Path resolvedPath = destDirPath.resolve(entry.getName()).normalize();
+
+                // 安全校验：防止 Zip Slip
+                if (!resolvedPath.startsWith(destDirPath)) {
+                    throw new IOException("Bad zip entry: " + entry.getName());
+                }
+
                 if (entry.isDirectory()) {
-                    newFile.mkdirs();
+                    Files.createDirectories(resolvedPath);
                 } else {
-                    // 确保父目录存在
-                    new File(newFile.getParent()).mkdirs();
-                    try (FileOutputStream fos = new FileOutputStream(newFile)) {
+                    Files.createDirectories(resolvedPath.getParent());
+
+                    try (OutputStream os = Files.newOutputStream(resolvedPath)) {
                         int len;
                         while ((len = zis.read(buffer)) > 0) {
-                            fos.write(buffer, 0, len);
+                            os.write(buffer, 0, len);
                         }
                     }
                 }
+
                 zis.closeEntry();
             }
         } catch (IOException e) {
-            log.error("unzip failed: {}, {}, {}", zipFilePath, destDir, e.getMessage());
+            log.error("unzip failed: {}, {}, {}", zipFilePath, destDir, e.getMessage(), e);
         }
     }
+
     
     /**
      * 压缩文件或目录

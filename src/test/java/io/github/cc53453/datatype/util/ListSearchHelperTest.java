@@ -11,9 +11,9 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ListSearchHelperTest {
+class ListSearchHelperTest {
     @Test
-    public void test() {
+    void test() {
         List<UserModel> users = Arrays.asList(
                 new UserModel(0, false, "张0", 29L), 
                 new UserModel(1, false, "张1", 19L), 

@@ -10,11 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest(classes = Main.class)
 @Slf4j
-public class DefaultDesensitizeProcessorTest {
+class DefaultDesensitizeProcessorTest {
     @Autowired
     private DefaultDesensitizeProcessor defaultDesensitizeProcessor;
     @Test
-    public void test() {
+    void test() {
         Assertions.assertEquals("********", defaultDesensitizeProcessor.apply("password", 
                 "value"));
         Assertions.assertEquals("127.*.*.1", defaultDesensitizeProcessor.apply("ip", 

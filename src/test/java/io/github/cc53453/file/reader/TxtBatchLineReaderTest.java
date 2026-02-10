@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class TxtBatchLineReaderTest {
+class TxtBatchLineReaderTest {
     @Test
     void test() throws IOException {
         TxtBatchLineReader br = new TxtBatchLineReader("test/test.txt");

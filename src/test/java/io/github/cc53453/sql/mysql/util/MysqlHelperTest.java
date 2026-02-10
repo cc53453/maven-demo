@@ -15,9 +15,9 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class MysqlHelperTest {
+class MysqlHelperTest {
     @Test
-    public void test() throws NoSuchFieldException, IllegalAccessException {
+    void test() throws NoSuchFieldException, IllegalAccessException {
         SimpleDateFormat sdf = new SimpleDateFormat(DateHelper.FORMAT_YYYY_MM_DD_HH_MM_SS);
         TestEntity test1 = new TestEntity();
         test1.setId(1L);

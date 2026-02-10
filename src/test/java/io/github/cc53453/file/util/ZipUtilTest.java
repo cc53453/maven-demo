@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ZipUtilTest {
+class ZipUtilTest {
     @Test
     void test() {
         ZipUtil.zip("test/", "test.zip", "test/");

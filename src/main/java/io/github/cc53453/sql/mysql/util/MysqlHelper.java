@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 
 import io.github.cc53453.datatype.util.ClassReflectHelper;
 import io.github.cc53453.datatype.util.DateHelper;
-import io.github.cc53453.datatype.util.StringHelper;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -34,47 +33,88 @@ public class MysqlHelper {
      * @return insert的sql语句
      */
     public static <T> String mybatisEntityToInsertSql(T entity, String tableName, Class<T> entityClass, String dateFormatStr) {
+         SimpleDateFormat sdf = dateFormatStr == null
+                 ? new SimpleDateFormat(DateHelper.FORMAT_YYYY_MM_DD_HH_MM_SS)
+                 : new SimpleDateFormat(dateFormatStr);
+
+         List<String> columns = new ArrayList<>();
+         List<String> values = new ArrayList<>();
+
+         for (Field field : entityClass.getDeclaredFields()) {
+             TableField tableField = field.getAnnotation(TableField.class);
+             if (tableField != null) {
+                 Object value = ClassReflectHelper.getFieldValue(entity, field);
+                 if (value == null) {
+                     continue;
+                 }
+                 columns.add(tableField.value());
+                 values.add(toSqlValue(value, sdf));
+             }
+         }
+
+         return String.format(
+                 "INSERT INTO %s (%s) VALUES (%s);",
+                 tableName,
+                 String.join(", ", columns),
+                 String.join(", ", values)
+         );
+     }
+
+     /**
+      * 把类型判断和 SQL 转义逻辑提取成方法
+      * @param value 值, 不可为null
+      * @param sdf 时间格式，当value是date时使用 
+      * @return sql中的值
+      */
+     public static String toSqlValue(Object value, SimpleDateFormat sdf) {
+         if (value instanceof String || value instanceof Character) {
+             return String.format("'%s'", escapeMySqlString(String.valueOf(value)));
+         }
+         if (value instanceof Boolean boolenValue) {
+             return Boolean.TRUE.equals(boolenValue) ? "1" : "0";
+         }
+         if (value instanceof Date day) {
+             return String.format("'%s'", sdf.format(day));
+         }
+         return value.toString();
+     }
+
+    
+    /**
+     * 处理字符串中的特殊字符，使其可以使用在sql语句中
+     * @param value 字符串
+     * @return 处理特殊字符后的字符串
+     */
+    public static String escapeMySqlString(String value) {
+        if (value == null) {
+            return null;
+        }
         StringBuilder sb = new StringBuilder();
-        StringBuilder valuesSb = new StringBuilder();
-
-        sb.append("INSERT INTO ").append(tableName).append(" (");
-        valuesSb.append("VALUES (");
-        SimpleDateFormat sdf = dateFormatStr == null ? new SimpleDateFormat(
-                DateHelper.FORMAT_YYYY_MM_DD_HH_MM_SS) : new SimpleDateFormat(dateFormatStr);
-        
-        List<String> columns = new ArrayList<>();
-        List<String> values = new ArrayList<>();
-        for (Field field : entityClass.getDeclaredFields()) {
-            TableField tableField = field.getAnnotation(TableField.class);
-            if(tableField == null) {
-                continue;
-            }
-            String column = tableField.value();
-            Object value = ClassReflectHelper.getFieldValue(entity, field);
-
-            if ( value != null) {
-                columns.add(column);
-                if (value instanceof String || value instanceof Character) {
-                    // 字符串本身如果有单引号，需转义
-                    values.add(String.format("'%s'", StringHelper.escapeMySqlString(String.valueOf(value))));
-                } else if (value instanceof Boolean) {
-                    // true为1
-                    values.add((Boolean) value ? "1" : "0");
-                } else if (value instanceof Date) {
-                    values.add(String.format("'%s'", sdf.format((Date) value)));
-                } else {
-                    values.add(value.toString());
-                }
+        for (char c : value.toCharArray()) {
+            switch (c) {
+                case '\0':
+                    sb.append("\\0");
+                    break;
+                case '\n':
+                    sb.append("\\n");
+                    break;
+                case '\r':
+                    sb.append("\\r");
+                    break;
+                case '\t':
+                    sb.append("\\t");
+                    break;
+                case '\'':
+                    sb.append("''"); // MySQL 推荐双单引号
+                    break;
+                case '\\':
+                    sb.append("\\\\");
+                    break;
+                default:
+                    sb.append(c);
             }
         }
-
-        sb.append(String.join(", ", columns)).append(") ");
-        valuesSb.append(String.join(", ", values)).append(");");
-        sb.append(valuesSb);
-
         return sb.toString();
     }
-    
-    
 
 }

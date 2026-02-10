@@ -2,7 +2,6 @@ package io.github.cc53453.file.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.IOException;
 import java.util.Properties;
 
 import org.junit.jupiter.api.Test;
@@ -10,9 +9,9 @@ import org.junit.jupiter.api.Test;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class PropertiesUtilTest {
+class PropertiesUtilTest {
     @Test
-    void test() throws IOException {
+    void test() {
         Properties props = PropertiesUtil.loadProperties("test/test.properties");
         
         System.out.println(props.get("app.users[0].name"));
