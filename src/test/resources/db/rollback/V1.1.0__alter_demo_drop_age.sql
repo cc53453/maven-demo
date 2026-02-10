@@ -1,0 +1,1 @@
+ALTER TABLE `demo` DROP COLUMN `age`;

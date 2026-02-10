@@ -12,7 +12,6 @@ import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.jasypt.encryption.StringEncryptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 import io.github.cc53453.sm4.config.SM4Config;
@@ -24,21 +23,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SM4Encryptor implements StringEncryptor {
     /**
-     * 默认构造函数，由 Spring 自动调用
-     */
-    public SM4Encryptor() {}
-    
-    /**
      * sm4配置信息
      */
-    @Autowired
-    private SM4Config sm4Config;
+    private final SM4Config sm4Config;
     
     /**
      * 需要加密的名为需要以{TODOSMS4}为前缀
      */
-    private final static String DECRYPT_PREFIX = "{TODOSMS4}";
+    private static final String DECRYPT_PREFIX = "{TODOSMS4}";
 
+    /**
+     * 构造函数
+     * @param sm4Config 框架注入sm4配置
+     */
+    public SM4Encryptor(SM4Config sm4Config) {
+        this.sm4Config = sm4Config;
+    }
+    
     /**
      * 判断是否需要加密
      * @param text 字符串

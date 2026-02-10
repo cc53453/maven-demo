@@ -28,7 +28,7 @@ public class DefaultDesensitizeProcessor {
     }
     
     /**
-     * 按自动注入的strategy依次执行，以第一个命中规则的脱敏结果作为返回
+     * 按自动注入的strategy依次执行,多个策略命中会多次生效
      * @param key 配置的key
      * @param value 配置的value
      * @return 第一个命中规则的脱敏结果

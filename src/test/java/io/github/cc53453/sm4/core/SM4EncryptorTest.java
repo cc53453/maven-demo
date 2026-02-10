@@ -9,7 +9,7 @@ import io.github.cc53453.Main;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes = Main.class)
-public class SM4EncryptorTest {
+class SM4EncryptorTest {
     @Autowired
     private SM4Encryptor sm4;
 
@@ -17,7 +17,7 @@ public class SM4EncryptorTest {
     private SM4EncryptablePropertyDetector sm4EncryptablePropertyDetector;
     
     @Test
-    public void test() {
+    void test() {
         // 假设 UserService 有一个方法可以获取用户的名字
         String decode = "test123@";
         String encode = sm4.encrypt(decode);

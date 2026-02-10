@@ -2,10 +2,11 @@ package io.github.cc53453.sm4.config;
 
 import io.github.cc53453.sm4.listener.AutoEncryptLocalFile;
 import io.github.cc53453.sm4.annotation.EnableSm4Encrypt;
-import io.github.cc53453.sm4.core.SM4Encryptor;
 
 import java.util.Map;
 
+import org.jasypt.encryption.StringEncryptor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportAware;
@@ -20,7 +21,7 @@ public class AutoEncryptConfiguration implements ImportAware {
     /**
      * 默认构造函数，由 Spring 自动调用
      */
-    public AutoEncryptConfiguration() {}
+    public AutoEncryptConfiguration() {} // NOSONAR
     
     /**
      * 注解中的filesPath
@@ -36,7 +37,7 @@ public class AutoEncryptConfiguration implements ImportAware {
     @Bean
     AutoEncryptLocalFile autoEncryptLocalFile(
             Environment environment,
-            SM4Encryptor sm4Encryptor) {
+            @Qualifier("jasyptStringEncryptor") StringEncryptor sm4Encryptor) {
         return new AutoEncryptLocalFile(filesPath, environment, sm4Encryptor);
     }
 

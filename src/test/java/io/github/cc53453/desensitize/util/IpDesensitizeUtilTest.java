@@ -6,12 +6,10 @@ import org.junit.jupiter.api.Test;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class IpDesensitizeUtilTest {
-
+class IpDesensitizeUtilTest {
     @Test
-    public void test() {
+    void test() {
         Assertions.assertEquals("127.*.*.1,127.*.*.2", 
                 IpDesensitizeUtil.maskIpv4("127.0.0.1,127.0.0.2"));
-        
     }
 }

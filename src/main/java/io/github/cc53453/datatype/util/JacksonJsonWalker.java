@@ -37,7 +37,7 @@ public final class JacksonJsonWalker {
      * 遍历JsonNode. 注意本方法只能支持遍历时对叶子节点做value值的修改或查询。
      * 任何新增、删除节点，改变了树的结构会导致遍历出现问题
      * @param node 需要遍历的JsonNode对象
-     * @param consumer 遍历到叶子节点时调用的方法。传参为(path,node)，path是叶子节点的完整路径，node是该叶子节点的JsonNode对象。
+     * @param consumer 遍历到叶子节点时调用的方法。传参为JacksonJsonWalkContext。
      */
     public static void walk(JsonNode node, Consumer<JacksonJsonWalkContext> consumer) {
         walk(node, "", null, null, consumer);

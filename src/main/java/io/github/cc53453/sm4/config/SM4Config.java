@@ -19,7 +19,7 @@ public class SM4Config {
     /**
      * 默认构造函数，由 Spring 自动调用
      */
-    public SM4Config() {}
+    public SM4Config() {}  // NOSONAR
     
     /**
      * 密钥，必须是 16 字节

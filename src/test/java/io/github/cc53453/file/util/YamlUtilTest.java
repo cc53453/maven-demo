@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class YamlUtilTest {
+class YamlUtilTest {
     @Test
     void test() {
         JsonNode json = YamlUtil.loadYaml("test/test.yaml");

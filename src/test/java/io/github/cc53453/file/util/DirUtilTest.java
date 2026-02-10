@@ -9,7 +9,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class DirUtilTest {
+class DirUtilTest {
     @Test
     void test() {
         List<File> result = DirUtil.listFilesRecursive(new File("test/").getAbsolutePath());
