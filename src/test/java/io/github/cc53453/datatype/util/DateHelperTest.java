@@ -16,6 +16,9 @@ class DateHelperTest {
         Assertions.assertEquals(2023, day.getYear());
         Assertions.assertEquals(6, day.getMonth().getValue());
         Assertions.assertEquals(21, day.getDayOfMonth());
+        
+        Assertions.assertTrue(DateHelper.now(DateHelper.FORMAT_YYYYMMDD).matches("\\d{8}"));
+        Assertions.assertEquals(-1, DateHelper.daysBetween("20260202", "20260201", DateHelper.FORMAT_YYYYMMDD));
+        Assertions.assertEquals(1, DateHelper.daysBetween("20260201", "20260202", DateHelper.FORMAT_YYYYMMDD));
     }
-
 }

@@ -21,5 +21,4 @@ spring:
     baseline-version: 1.0.0
   undoflyway:
     locations: classpath:db/rollback
-    datasource-type: MYSQL
     

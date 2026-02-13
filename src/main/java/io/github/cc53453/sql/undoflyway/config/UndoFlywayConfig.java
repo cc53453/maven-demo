@@ -4,7 +4,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
 
-import io.github.cc53453.sql.undoflyway.enums.DatasourceType;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
@@ -26,9 +25,4 @@ public class UndoFlywayConfig {
      */
     @Pattern(regexp = "^classpath:.*$", message = "路径格式必须为类路径")
     private String locations = "classpath:db/rollback";
-    
-    /**
-     * 数据源类型,详见{@link io.github.cc53453.sql.undoflyway.enums.DatasourceType}
-     */
-    private DatasourceType datasourceType = DatasourceType.MYSQL;
 }
