@@ -27,6 +27,10 @@ class ListSearchHelperTest {
         Assertions.assertEquals(users.get(1), search.get("id", 1).first().get());
         Assertions.assertEquals(users.get(3), search.get("name", "张3").first().get());
         Assertions.assertEquals(users.get(4), search.get("age", 19L).get("sex", true).first().get());
+    
+        Assertions.assertTrue(search.get("id", 6).isEmpty());
+        Assertions.assertEquals(1, search.get("id", 1).size());
+        Assertions.assertEquals(users.get(1), search.get("id", 1).toList().get(0));
     }
     
     @Data

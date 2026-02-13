@@ -1,5 +1,6 @@
 package io.github.cc53453.sql.mysql.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -17,7 +18,29 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 class MysqlHelperTest {
     @Test
-    void test() throws NoSuchFieldException, IllegalAccessException {
+    void test() throws ParseException {
+        Assertions.assertEquals(
+                "\\0\\n\\r\\t''\\\\", 
+                MysqlHelper.escapeMySqlString("\0\n\r\t'\\"));
+
+        Assertions.assertEquals(
+                "1", 
+                MysqlHelper.toSqlValue(true, null));
+        Assertions.assertEquals(
+                "0", 
+                MysqlHelper.toSqlValue(false, null));
+        Assertions.assertEquals(
+                "'cadcshods'", 
+                MysqlHelper.toSqlValue("cadcshods", null));
+        SimpleDateFormat sdf = new SimpleDateFormat(DateHelper.FORMAT_YYYYMMDD);
+        Assertions.assertEquals(
+                "'20250101'", 
+                MysqlHelper.toSqlValue(sdf.parse("20250101"), sdf));
+    }
+    
+    @Test
+    void testMybatisEntityToInsertSql() throws NoSuchFieldException, IllegalAccessException {
+        // 测试都有值
         SimpleDateFormat sdf = new SimpleDateFormat(DateHelper.FORMAT_YYYY_MM_DD_HH_MM_SS);
         TestEntity test1 = new TestEntity();
         test1.setId(1L);
@@ -33,6 +56,7 @@ class MysqlHelperTest {
         Assertions.assertTrue(sql1.contains(String.valueOf(test1.getSex())));
         Assertions.assertTrue(sql1.contains(sdf.format(test1.getCreateDate())));
         
+        // 测试只有两个列有值
         TestEntity test2 = new TestEntity();
         test2.setId(2L);
         test2.setName("test2");

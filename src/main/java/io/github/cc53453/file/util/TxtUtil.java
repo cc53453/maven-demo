@@ -94,14 +94,14 @@ public final class TxtUtil {
      * @param contents 内容，list的一个元素对应一行
      * @return 是否写成功
      */
-    public static boolean write(String filePath, List<String> contents) {
+    public static <T extends TxtLineDTO> boolean write(String filePath, List<T> contents) {
         // 目标文件路径
         Path path = Paths.get(filePath);
 
         try {
             StringBuilder sb = new StringBuilder();
-            for(String content:contents) {
-                sb.append(content).append("\n");
+            for(T content:contents) {
+                sb.append(content.toTxtLine()).append("\n");
             }
             Files.write(path, sb.toString().getBytes(StandardCharsets.UTF_8));
             return true;
