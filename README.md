@@ -33,3 +33,6 @@
 
 ## 发布命令
 mvn clean deploy
+
+## sonar报告
+https://sonarcloud.io/summary/new_code?id=cc53453_maven-demo&branch=develop
