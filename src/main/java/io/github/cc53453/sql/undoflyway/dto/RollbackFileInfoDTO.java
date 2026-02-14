@@ -1,9 +1,17 @@
-package io.github.cc53453.sql.undoflyway.model;
+package io.github.cc53453.sql.undoflyway.dto;
 
 import lombok.Data;
 
+/**
+ * 回退脚本信息类
+ */
 @Data
-public class RollbackFileModel {
+public class RollbackFileInfoDTO {
+    /**
+     * 默认的构造函数
+     */
+    public RollbackFileInfoDTO() {} // NOSONAR
+    
     /**
      * 所在目录
      */

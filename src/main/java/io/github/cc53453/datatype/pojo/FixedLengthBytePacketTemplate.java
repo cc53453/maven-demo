@@ -28,6 +28,11 @@ public abstract class FixedLengthBytePacketTemplate {
      * @param bytes 定长报文
      */
     public abstract void load(byte[] bytes);
+
+    /**
+     * 默认的构造函数
+     */
+    public FixedLengthBytePacketTemplate() {} // NOSONAR
     
     /**
      * 拼接byte[]

@@ -14,11 +14,20 @@ public class ByteArrayReader {
     @Setter
     private Integer pos;
     
+    /**
+     * 构造函数。深拷贝
+     * @param array 要读取的数组
+     */
     public ByteArrayReader(byte[] array) {
         this.array = Arrays.copyOf(array, array.length);
         pos = 0;
     }
     
+    /**
+     * 获取下个长度的数组
+     * @param length 下个数组的长度
+     * @return 数组
+     */
     public byte[] next(Integer length) {
         byte[] result = new byte[length];
         if(pos + length > array.length) {

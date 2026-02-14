@@ -11,7 +11,7 @@ import org.flywaydb.core.api.MigrationInfo;
 import org.flywaydb.core.api.output.MigrateResult;
 import org.springframework.stereotype.Component;
 
-import io.github.cc53453.sql.undoflyway.model.RollbackFileModel;
+import io.github.cc53453.sql.undoflyway.dto.RollbackFileInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -27,7 +27,7 @@ public class FlywayManager {
     
     /**
      * 构造函数
-     * @param dataSource 数据源注入
+     * @param flyway bean注入
      */
     public FlywayManager(Flyway flyway) {
         this.flyway = flyway;
@@ -78,7 +78,7 @@ public class FlywayManager {
      * @param file sql文件
      * @return 校验和
      */
-    public static Integer calculateChecksum(RollbackFileModel file) {
+    public static Integer calculateChecksum(RollbackFileInfoDTO file) {
         String fileName = file.getFullFilename();
         int checksum = ChecksumCalculator.calculate(new FileSystemResource(
                 null, fileName, StandardCharsets.UTF_8, false));

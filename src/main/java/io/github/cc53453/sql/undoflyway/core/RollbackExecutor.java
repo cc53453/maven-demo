@@ -18,8 +18,8 @@ import org.springframework.stereotype.Component;
 import io.github.cc53453.file.util.DirUtil;
 import io.github.cc53453.file.util.FilePathUtil;
 import io.github.cc53453.sql.undoflyway.config.UndoFlywayConfig;
+import io.github.cc53453.sql.undoflyway.dto.RollbackFileInfoDTO;
 import io.github.cc53453.sql.undoflyway.mapper.UndoFlywayHistoryMapper;
-import io.github.cc53453.sql.undoflyway.model.RollbackFileModel;
 import io.github.cc53453.sql.undoflyway.model.UndoFlywayHistoryModel;
 import io.github.cc53453.sql.undoflyway.util.FlywayManager;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +35,13 @@ public class RollbackExecutor {
     private final UndoFlywayHistoryMapper undoFlywayHistoryMapper;
     private final UndoFlywayConfig undoFlywayConfig;
 
+    /**
+     * 构造函数
+     * @param dataSource spring注入
+     * @param flyway spring注入
+     * @param undoFlywayHistoryMapper spring注入
+     * @param undoFlywayConfig spring注入
+     */
     public RollbackExecutor(DataSource dataSource, FlywayManager flyway, UndoFlywayHistoryMapper undoFlywayHistoryMapper, UndoFlywayConfig undoFlywayConfig) {
         this.dataSource = dataSource;
         this.flyway = flyway;
@@ -46,7 +53,7 @@ public class RollbackExecutor {
      * 严格管控回退。更建议用户调用本方法。
      * 会进行如下检查：1. 已经回退过且success的版本不再重复 2. 历史回退过但失败的版本，如果脚本的checksum变了也不允许再执行 3. 只允许回退最新的版本
      * @param version 回退哪个版本
-     * @throws SQLException
+     * @throws SQLException sql抛错
      */
     public void rollbackStrict(String version) throws SQLException {
         String newest = flyway.getLatestVersion();
@@ -64,7 +71,7 @@ public class RollbackExecutor {
                 }
                 
                 // 虽然过去失败了，但是过去的脚本的checksum和本次不一样了
-                RollbackFileModel file = getScript(version);
+                RollbackFileInfoDTO file = getScript(version);
                 if(!undo.getChecksum().equals(file.getChecksum())) {
                     throw new IllegalStateException(String.format(
                             "there's an undo-failed history, but history.checksum != current.checksum. history: %s, current: %s", 
@@ -84,7 +91,7 @@ public class RollbackExecutor {
      * @throws SQLException sql执行异常
      */
     public void rollback(String version) throws SQLException {
-        RollbackFileModel file = getScript(version);
+        RollbackFileInfoDTO file = getScript(version);
         log.info("executeSqlScript: {}", file);
         
         UndoFlywayHistoryModel model = new UndoFlywayHistoryModel();
@@ -114,7 +121,7 @@ public class RollbackExecutor {
         }
     }
     
-    private RollbackFileModel getScript(String version) {
+    private RollbackFileInfoDTO getScript(String version) {
         String path = FilePathUtil.getFullPathByClassPathResource(undoFlywayConfig.getLocations());
         List<File> files = DirUtil.listFiles(path);
         
@@ -123,7 +130,7 @@ public class RollbackExecutor {
             if(f.getName().startsWith(filenameStartWith) && 
                     f.getName().endsWith(".sql")) {
                 log.debug("find rollback sql: {}", f.getAbsolutePath());
-                RollbackFileModel script = new RollbackFileModel();
+                RollbackFileInfoDTO script = new RollbackFileInfoDTO();
                 script.setFullFilename(f.getAbsolutePath());
                 script.setFilename(f.getName());
                 script.setDir(f.getParent());

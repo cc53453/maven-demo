@@ -90,6 +90,7 @@ public final class TxtUtil {
     
     /**
      * 把内容写到txt文件中
+     * @param <T> 必须扩展TxtLineDTO，且存在无参的构造函数
      * @param filePath 文件路径
      * @param contents 内容，list的一个元素对应一行
      * @return 是否写成功
