@@ -28,6 +28,7 @@ public class NumberHelper {
     
     /**
      * 计算绝对值。逻辑和Math.abs保持一致，对于 XXX.MIN_VALUE，返回保持不变
+     * @param <T> 只支持BigDecimal，BigInteger，Byte，Double，Float，Integer，Long，Short
      * @param n 数字
      * @return 绝对值
      */

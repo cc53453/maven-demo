@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 
 import io.github.cc53453.sm4.annotation.EnableSm4Encrypt;
 import io.github.cc53453.sql.undoflyway.core.RollbackExecutor;
+import io.github.cc53453.sql.undoflyway.util.FlywayManager;
 import lombok.extern.slf4j.Slf4j;
 
 @EnableConfigurationProperties
@@ -21,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
     basePackages = "io.github.cc53453",
     excludeFilters = @ComponentScan.Filter(
         type = FilterType.ASSIGNABLE_TYPE,
-        classes = {MainWithDatasource.class, RollbackExecutor.class}
+        classes = {MainWithDatasource.class, RollbackExecutor.class, FlywayManager.class}
     )
 )
 @EnableSm4Encrypt(filesPath = {"classpath:application.yml"})
