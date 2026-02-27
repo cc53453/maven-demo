@@ -6,13 +6,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ZipUtilTest {
+class ZipUtilTest {
     @Test
     void test() {
-        ZipUtil.zip("test/", "test.zip");
-        assertTrue(FileBaseUtil.exists("test.zip"));
-        ZipUtil.unzip("test.zip", "test-out/");
-        assertTrue(FileBaseUtil.exists("test-out/"));
-        FileBaseUtil.deleteFile("test.zip");
+        DirUtil.checkDir("test-out/");
+        ZipUtil.zip("test/", "test-out/test.zip", "test/");
+        assertTrue(ZipUtil.isZip("test-out/test.zip"));
+        assertTrue(FileBaseUtil.exists("test-out/test.zip"));
+        ZipUtil.unzip("test-out/test.zip", "test-out/");
+        assertTrue(FileBaseUtil.exists("test-out/test.yaml"));
+        DirUtil.deleteRecursive("test-out/");
+
+        DirUtil.checkDir("test-out/");
+        ZipUtil.zip("test/", "test-out/test.zip", "./");
+        assertTrue(FileBaseUtil.exists("test-out/test.zip"));
+        ZipUtil.unzip("test-out/test.zip", "test-out/");
+        assertTrue(FileBaseUtil.exists("test-out/test/test.yaml"));
+        FileBaseUtil.deleteFile("test-out/test.zip");
+        DirUtil.deleteRecursive("test-out/test/");
     }
 }

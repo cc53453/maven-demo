@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jasypt.encryption.StringEncryptor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 
@@ -22,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class AutoEncryptLocalFile implements CommandLineRunner {
-    private final SM4Encryptor sm4Encryptor;
+    private final StringEncryptor sm4Encryptor;
     private Set<String> filesPath;
     private boolean needWrite = false;
 
@@ -32,7 +33,7 @@ public class AutoEncryptLocalFile implements CommandLineRunner {
      * @param environment 环境/配置变量
      * @param sm4Encryptor 加密器
      */
-    public AutoEncryptLocalFile(String[] paths, Environment environment, SM4Encryptor sm4Encryptor) {
+    public AutoEncryptLocalFile(String[] paths, Environment environment, StringEncryptor sm4Encryptor) {
         this.sm4Encryptor = sm4Encryptor;
 
         filesPath = new HashSet<>();

@@ -37,8 +37,7 @@ public final class FileBaseUtil {
      */
     public static Long fileLineCount(String filePath) {
         try {
-            long lineCount = Files.lines(Paths.get(filePath)).count();  // 使用流式处理并计数
-            return lineCount;
+            return Files.lines(Paths.get(filePath)).count();  // 使用流式处理并计数
         } catch (IOException e) {
             log.error("fileLineCount failed: {}", e.getMessage());
             return null;
@@ -50,12 +49,11 @@ public final class FileBaseUtil {
      * @param filePath 文件路径
      */
     public static void deleteFile(String filePath) {
-        File file = new File(filePath);
-
-        if (file.delete()) {
+        try {
+            Files.delete(Paths.get(filePath));
             log.info("delete {} success", filePath);
-        } else {
-            log.error("delete {} error, maybe it's not exist, or cannot be deleted", filePath);
+        } catch (IOException e) {
+            log.error("delete {} error, maybe it's not exist, or cannot be deleted", filePath, e);
         }
     }
     

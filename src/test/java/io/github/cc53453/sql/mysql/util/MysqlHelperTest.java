@@ -1,0 +1,86 @@
+package io.github.cc53453.sql.mysql.util;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+
+import io.github.cc53453.datatype.util.DateHelper;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+class MysqlHelperTest {
+    @Test
+    void test() throws ParseException {
+        Assertions.assertEquals(
+                "\\0\\n\\r\\t''\\\\", 
+                MysqlHelper.escapeMySqlString("\0\n\r\t'\\"));
+
+        Assertions.assertEquals(
+                "1", 
+                MysqlHelper.toSqlValue(true, null));
+        Assertions.assertEquals(
+                "0", 
+                MysqlHelper.toSqlValue(false, null));
+        Assertions.assertEquals(
+                "'cadcshods'", 
+                MysqlHelper.toSqlValue("cadcshods", null));
+        SimpleDateFormat sdf = new SimpleDateFormat(DateHelper.FORMAT_YYYYMMDD);
+        Assertions.assertEquals(
+                "'20250101'", 
+                MysqlHelper.toSqlValue(sdf.parse("20250101"), sdf));
+    }
+    
+    @Test
+    void testMybatisEntityToInsertSql() throws NoSuchFieldException, IllegalAccessException {
+        // 测试都有值
+        SimpleDateFormat sdf = new SimpleDateFormat(DateHelper.FORMAT_YYYY_MM_DD_HH_MM_SS);
+        TestEntity test1 = new TestEntity();
+        test1.setId(1L);
+        test1.setName("test1");
+        test1.setIsStaff(false);
+        test1.setSex('1');
+        test1.setCreateDate(new Date());
+        String sql1 = MysqlHelper.mybatisEntityToInsertSql(test1, "db1.test", TestEntity.class, null);
+        log.info("sql1: {}", sql1);
+        Assertions.assertTrue(sql1.contains(String.valueOf(test1.getId())));
+        Assertions.assertTrue(sql1.contains(String.valueOf(test1.getName())));
+        Assertions.assertTrue(sql1.contains("is_staff"));
+        Assertions.assertTrue(sql1.contains(String.valueOf(test1.getSex())));
+        Assertions.assertTrue(sql1.contains(sdf.format(test1.getCreateDate())));
+        
+        // 测试只有两个列有值
+        TestEntity test2 = new TestEntity();
+        test2.setId(2L);
+        test2.setName("test2");
+        String sql2 = MysqlHelper.mybatisEntityToInsertSql(test2, "db1.test", TestEntity.class, null);
+        log.info("sql2: {}", sql2);
+        Assertions.assertTrue(sql2.contains(String.valueOf(test2.getId())));
+        Assertions.assertTrue(sql2.contains(String.valueOf(test2.getName())));
+        Assertions.assertFalse(sql2.contains("is_staff"));
+        Assertions.assertFalse(sql2.contains(String.valueOf(test2.getSex())));
+        Assertions.assertFalse(sql2.contains("create_date"));
+    }
+    
+    @Data
+    public class TestEntity {
+        @TableId(type = IdType.AUTO)
+        @TableField("id")
+        private Long id;
+        @TableField("name")
+        private String name;
+        @TableField("is_staff")
+        private Boolean isStaff;
+        @TableField("sex")
+        private Character sex;
+        @TableField("create_date")
+        private Date createDate;
+    }
+}

@@ -23,7 +23,7 @@ public final class YamlUtil {
     /**
      * 文件后缀
      */
-    public static final String[] fileExtension = {".yaml", ".yml"};
+    protected static final String[] fileExtension = {".yaml", ".yml"};
     /**
      * 工具类，不支持实例化
      */

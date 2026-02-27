@@ -12,12 +12,12 @@ public class SM4EncryptablePropertyDetector implements EncryptablePropertyDetect
     /**
      * 加密后的密文会以{SMS4}为前缀
      */
-    private final static String ENCRYPT_PREFIX = "{SMS4}";
+    private static final String ENCRYPT_PREFIX = "{SMS4}";
 
     /**
      * 默认构造函数，由 Spring 自动调用
      */
-    public SM4EncryptablePropertyDetector() {}
+    public SM4EncryptablePropertyDetector() {} // NOSONAR
     
     /**
      * 加密完成后的密文调用本方法增加前缀标识

@@ -18,7 +18,7 @@ public final class PropertiesUtil {
     /**
      * 文件后缀
      */
-    public static final String fileExtension = ".properties";
+    public static final String FILE_EXTENSION = ".properties";
     /**
      * 工具类，不支持实例化
      */
@@ -35,7 +35,7 @@ public final class PropertiesUtil {
         if(fileName == null) {
             return false;
         }
-        return fileName.toLowerCase().endsWith(fileExtension);
+        return fileName.toLowerCase().endsWith(FILE_EXTENSION);
     }
     
     /**
