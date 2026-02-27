@@ -180,14 +180,10 @@
         <artifactId>maven-gpg-plugin</artifactId>
         <version>3.2.8</version>
         <configuration>
-          <gpgArguments>
-            <arg>--pinentry-mode</arg>
-            <arg>loopback</arg>
-          </gpgArguments>
+          <pinentryMode>loopback</pinentryMode>
         </configuration>
         <executions>
           <execution>
-            <id>sign-artifacts</id>
             <phase>verify</phase>
             <goals>
               <goal>sign</goal>
