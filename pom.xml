@@ -180,7 +180,12 @@
         <artifactId>maven-gpg-plugin</artifactId>
         <version>3.2.8</version>
         <configuration>
-          <pinentryMode>loopback</pinentryMode>
+          <gpgArguments>
+            <arg>--pinentry-mode</arg>
+            <arg>loopback</arg>
+          </gpgArguments>
+          <passphrase>${env.GPG_PASSPHRASE}</passphrase>
+          <useAgent>false</useAgent>
         </configuration>
         <executions>
           <execution>
