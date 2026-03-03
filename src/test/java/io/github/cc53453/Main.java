@@ -13,6 +13,7 @@ import org.springframework.context.annotation.FilterType;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 
 import io.github.cc53453.sm4.annotation.EnableSm4Encrypt;
+import io.github.cc53453.springbatch.config.BatchConfig;
 import io.github.cc53453.sql.undoflyway.core.RollbackExecutor;
 import io.github.cc53453.sql.undoflyway.util.FlywayManager;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
     basePackages = "io.github.cc53453",
     excludeFilters = @ComponentScan.Filter(
         type = FilterType.ASSIGNABLE_TYPE,
-        classes = {MainWithDatasource.class, RollbackExecutor.class, FlywayManager.class}
+        classes = {MainWithDatasource.class, RollbackExecutor.class, FlywayManager.class, BatchConfig.class}
     )
 )
 @EnableSm4Encrypt(filesPath = {"classpath:application.yml"})

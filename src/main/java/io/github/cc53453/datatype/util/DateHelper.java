@@ -1,6 +1,7 @@
 package io.github.cc53453.datatype.util;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
@@ -41,7 +42,8 @@ public final class DateHelper {
      * @return 当天时间
      */
     public static String now(String format) {
-        return LocalDate.now().format(DateTimeFormatter.ofPattern(format));
+        return java.time.ZonedDateTime.now(ZoneId.systemDefault())
+                .format(DateTimeFormatter.ofPattern(format));
     }
     
     /**
