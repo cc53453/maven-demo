@@ -40,7 +40,7 @@ class FlywayManagerTest {
         log.info("migrate result: {}", result);
         
         Assertions.assertEquals("1.1.0", flywayManager.getLatestVersion());
-        Assertions.assertEquals(3, 
+        Assertions.assertEquals(4, 
                 flywayManager.getInstalledRankByVersion("1.1.0"));
 
         // 把数据库状态调整成下次能幂等再跑单元测试的状态
