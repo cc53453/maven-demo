@@ -9,7 +9,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/demo?useSSL=false&serverTimezone=UTC
     username: root
-    password: "{TODOSMS4}Bst#1103"
+    password: "{TODOSMS4}DevOps@3.1415926"
     driver-class-name: com.mysql.cj.jdbc.Driver
   flyway:
     enabled: true
