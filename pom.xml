@@ -42,6 +42,11 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+          <groupId>org.apache.poi</groupId>
+          <artifactId>poi</artifactId>
+          <version>5.5.1</version>
+      </dependency>
+      <dependency>
         <groupId>org.bouncycastle</groupId>
         <artifactId>bcprov-jdk18on</artifactId>
         <version>1.81</version>
@@ -85,6 +90,13 @@
           <artifactId>spring-boot-starter-logging</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+    
+    <!-- excel -->
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <optional>true</optional>
     </dependency>
     
     <!-- springboot configuration -->
