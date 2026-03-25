@@ -1,6 +1,7 @@
 package io.github.cc53453.datatype.util;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
@@ -24,6 +25,10 @@ public final class DateHelper {
      */
     public static final String FORMAT_YYYY_MM_DD_T_HH_MM_SS_SSSXXX = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
     /**
+     * 年份-月份-日期T小时:分钟:秒.毫秒
+     */
+    public static final String FORMAT_YYYY_MM_DD_T_HH_MM_SS_SSS = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+    /**
      * 年份-月份-日期 小时:分钟:秒
      */
     public static final String FORMAT_YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
@@ -41,7 +46,8 @@ public final class DateHelper {
      * @return 当天时间
      */
     public static String now(String format) {
-        return LocalDate.now().format(DateTimeFormatter.ofPattern(format));
+        return java.time.ZonedDateTime.now(ZoneId.systemDefault())
+                .format(DateTimeFormatter.ofPattern(format));
     }
     
     /**
