@@ -3,6 +3,7 @@ package io.github.cc53453.file.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -22,21 +23,25 @@ public class ShellUtil {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 	/**
-     * 执行shell命令，默认超时时间60s
+     * 执行shell命令，默认超时时间60s，UTF8
      * @param command 命令
      * @return 执行结果
      */
     public static ShellExecuteResultDTO execute(List<String> command) {
-        return execute(command, 60);
+        return execute(command, 60, StandardCharsets.UTF_8);
     }
     
     /**
      * 执行shell脚本（带超时）
      * @param command 命令
      * @param timeoutSeconds 超时时间（秒）
+     * @param charset 脚本的输出字符集
      * @return 执行结果
      */
-    public static ShellExecuteResultDTO execute(List<String> command, int timeoutSeconds) {
+    public static ShellExecuteResultDTO execute(
+    		List<String> command, 
+    		int timeoutSeconds, 
+    		Charset charset) {
         log.debug("command: {}, timeout: {}s", command, timeoutSeconds);
         ShellExecuteResultDTO result = new ShellExecuteResultDTO();
         
@@ -50,7 +55,7 @@ public class ShellUtil {
             // 读取输出
             StringBuilder output = new StringBuilder();
             try (BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {
+                    new InputStreamReader(process.getInputStream(), charset))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     output.append(line).append("\n");
