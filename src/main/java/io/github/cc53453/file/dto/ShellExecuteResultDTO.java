@@ -8,6 +8,10 @@ import lombok.Data;
 @Data
 public class ShellExecuteResultDTO {
 	/**
+     * 默认的构造函数
+     */
+    public ShellExecuteResultDTO() {} // NOSONAR
+	/**
 	 * 执行退出码是否为0
 	 */
 	private boolean success;
