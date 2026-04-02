@@ -2,7 +2,6 @@ package io.github.cc53453.datatype.util;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -40,10 +39,10 @@ public class SerializationHelper<T> {
      * 反序列化
      * @param filePath 文件
      * @return 对象
-     * @throws JsonProcessingException 反序列化失败
+     * @throws IOException 反序列化失败
      */
-    public T deserializeByJson(String filePath) throws JsonProcessingException {
-    	return objectMapper.readValue(filePath, 
+    public T deserializeByJson(String filePath) throws IOException {
+    	return objectMapper.readValue(new java.io.File(filePath), 
 				new TypeReference<T>() {});
 	}
 }
