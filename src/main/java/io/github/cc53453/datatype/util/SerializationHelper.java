@@ -10,11 +10,15 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 序列化反序列化工具
+ * @param <T> 序列化的对象类型
  */
 @Slf4j
 public class SerializationHelper<T> {
 	private final ObjectMapper objectMapper; 
 	
+	/**
+	 * 构造函数
+	 */
     public SerializationHelper() {
         this.objectMapper = new ObjectMapper()
     	        .enable(SerializationFeature.INDENT_OUTPUT);
@@ -36,13 +40,14 @@ public class SerializationHelper<T> {
     }
     
     /**
-     * 反序列化
+     * 传入具体的 Class 类型进行反序列化
      * @param filePath 文件
-     * @return 对象
+     * @param typeReference 类型
+     * @return 指的类型的对象
      * @throws IOException 反序列化失败
      */
-    public T deserializeByJson(String filePath) throws IOException {
-    	return objectMapper.readValue(new java.io.File(filePath), 
-				new TypeReference<T>() {});
-	}
+    public T deserializeByJson(String filePath, TypeReference<T> typeReference) throws IOException {
+        return objectMapper.readValue(new java.io.File(filePath), typeReference);
+    }
+    
 }
