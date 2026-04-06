@@ -24,7 +24,7 @@ public interface CommonMapper {
 	 * @param sourceTableName 源表名
 	 * @param targetTableName 目标表名
 	 */
-	@Update("CREATE TABLE ${targetTableName} LIKE ${sourceTableName}")
+	@Update("CREATE TABLE IF NOT EXISTS ${targetTableName} LIKE ${sourceTableName}")
 	@ValidateTableName
 	public void copyTableStructure(String sourceTableName, String targetTableName);
 	
