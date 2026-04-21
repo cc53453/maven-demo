@@ -22,4 +22,9 @@ public class NumberSingleCondition<T extends Number> {
      * 比较值（单值）
      */
     private T value;
+    
+    /**
+     * 分数
+     */
+    private Integer score;
 }

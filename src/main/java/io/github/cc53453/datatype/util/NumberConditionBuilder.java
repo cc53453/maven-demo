@@ -24,7 +24,8 @@ public class NumberConditionBuilder {
      */
     public static <T extends Number> NumberConditionExpression<T> condition(String field, 
                                                   CompareOperator operator, 
-                                                  T value) {
+                                                  T value, 
+                                                  Integer score) {
         NumberConditionExpression<T> expr = new NumberConditionExpression<>();
         expr.setType(ExpressionType.CONDITION);
         
@@ -32,6 +33,7 @@ public class NumberConditionBuilder {
         condition.setField(field);
         condition.setOperator(operator);
         condition.setValue(value);
+        condition.setScore(score);
         
         expr.setCondition(condition);
         return expr;
