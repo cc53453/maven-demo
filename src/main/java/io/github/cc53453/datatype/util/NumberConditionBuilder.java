@@ -21,19 +21,27 @@ public class NumberConditionBuilder {
     
     /**
      * 创建单个条件
+     * @param <T>
+     * @param field
+     * @param operator
+     * @param value
+     * @param score 如果是null，认为不评分
+     * @return
      */
     public static <T extends Number> NumberConditionExpression<T> condition(String field, 
                                                   CompareOperator operator, 
                                                   T value, 
+                                                  boolean scorable, 
                                                   Integer score) {
         NumberConditionExpression<T> expr = new NumberConditionExpression<>();
         expr.setType(ExpressionType.CONDITION);
+    	expr.setScorable(scorable);
+    	expr.setScore(score);
         
         NumberSingleCondition<T> condition = new NumberSingleCondition<>();
         condition.setField(field);
         condition.setOperator(operator);
         condition.setValue(value);
-        condition.setScore(score);
         
         expr.setCondition(condition);
         return expr;
@@ -42,34 +50,47 @@ public class NumberConditionBuilder {
     /**
      * AND组合
      */
-    public static <T extends Number> NumberConditionExpression<T> and(List<NumberConditionExpression<T>> expressions) {
-        return combine(LogicalOperator.AND, expressions);
+    public static <T extends Number> NumberConditionExpression<T> and(List<NumberConditionExpression<T>> expressions, 
+            boolean scorable, 
+            Integer score) {
+        return combine(LogicalOperator.AND, expressions, scorable, score);
     }
     
     /**
      * OR组合
      */
-    public static <T extends Number> NumberConditionExpression<T> or(List<NumberConditionExpression<T>> expressions) {
-        return combine(LogicalOperator.OR, expressions);
+    public static <T extends Number> NumberConditionExpression<T> or(List<NumberConditionExpression<T>> expressions, 
+            boolean scorable, 
+            Integer score) {
+        return combine(LogicalOperator.OR, expressions, scorable, score);
     }
     
     /**
      * NOT组合
      */
-    public static <T extends Number> NumberConditionExpression<T> not(NumberConditionExpression<T> expression) {
+    public static <T extends Number> NumberConditionExpression<T> not(
+    		NumberConditionExpression<T> expression, 
+            boolean scorable, 
+            Integer score) {
         NumberConditionExpression<T> expr = new NumberConditionExpression<>();
         expr.setType(ExpressionType.GROUP);
         expr.setOperator(LogicalOperator.NOT);
         expr.setNotExpression(expression);
+        expr.setScorable(scorable);
+    	expr.setScore(score);
         return expr;
     }
     
     private static <T extends Number> NumberConditionExpression<T> combine(LogicalOperator operator, 
-                                                List<NumberConditionExpression<T>> expressions) {
+                                                List<NumberConditionExpression<T>> expressions, 
+                                                boolean scorable, 
+                                                Integer score) {
         NumberConditionExpression<T> expr = new NumberConditionExpression<>();
         expr.setType(ExpressionType.GROUP);
         expr.setOperator(operator);
         expr.setChildren(expressions);
+        expr.setScorable(scorable);
+    	expr.setScore(score);
         return expr;
     }
 }

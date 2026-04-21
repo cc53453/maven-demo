@@ -38,5 +38,15 @@ public class NumberConditionExpression<T extends Number> {
      * NOT逻辑包装的表达式（当operator=NOT时使用）
      */
     private NumberConditionExpression<T> notExpression;
+    
+    /**
+     * 只有当该节点是评分节点时才有意义
+     */
+    private Integer score;
+    
+    /**
+     * 是否作为一个评分单元
+     */
+    private boolean scorable;
 }
 

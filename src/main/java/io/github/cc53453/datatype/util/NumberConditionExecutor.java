@@ -137,10 +137,25 @@ public class NumberConditionExecutor {
             return new NumberConditionEvaluateScoreResult(0.0, 0.0);
         }
         
-        if (expression.getType() == ExpressionType.CONDITION) {
-            return evaluateConditionScore(expression.getCondition(), data);
-        } else {
-            return evaluateGroupScore(expression, data);
+        if(expression.isScorable()) {
+        	// 当前节点就是最小的评分单位，下面哪怕还有评分单位，这里截断
+        	Integer actualScore = 0;
+            if ((expression.getType() == ExpressionType.CONDITION && 
+            		evaluateCondition(expression.getCondition(), data)) || 
+            		(expression.getType() == ExpressionType.GROUP && 
+            		evaluateGroup(expression, data))) {
+            	actualScore = expression.getScore();
+            }
+            return new NumberConditionEvaluateScoreResult(actualScore.doubleValue(), expression.getScore().doubleValue());
+        }
+        else {
+        	// 当前单位不是评分单位
+        	if(expression.getType() == ExpressionType.CONDITION) {
+        		// 下层是单个表达式，没有分数，只能返回0了
+        		return new NumberConditionEvaluateScoreResult(0.0, 0.0);
+        	}
+    		// 下层还是group，可能在下层有评分单位，本节点只需要and/or/not对分数做变化即可
+    		return evaluateGroupScore(expression, data);
         }
     }
     
@@ -150,12 +165,15 @@ public class NumberConditionExecutor {
      * OR: 分数取最大值
      * NOT: 分数取反（1 - 原分数）
      */
-    private static <T extends Number> NumberConditionEvaluateScoreResult evaluateGroupScore(
+    private static <T extends Number> NumberConditionEvaluateScoreResult evaluateGroupScore( // NOSONAR
             NumberConditionExpression<T> expression,
             Map<String, Object> data) {
+        if(expression.isScorable()) {
+        	// 走到这里不可能是评分单位
+        	throw new java.lang.IllegalStateException("invalid expression for evaluateGroupScore");
+        }
         
         LogicalOperator operator = expression.getOperator();
-        
         if (operator == LogicalOperator.NOT) {
             // NOT: 对子条件取反
             NumberConditionEvaluateScoreResult childResult = evaluateNumberConditionEvaluateScoreResult(
@@ -212,62 +230,6 @@ public class NumberConditionExecutor {
         }
         
         return new NumberConditionEvaluateScoreResult(0.0, 0.0);
-    }
-    
-    /**
-     * 评估单个条件的分数
-     * 满足条件则返回配置的分数，否则返回0
-     */
-    private static <T extends Number> NumberConditionEvaluateScoreResult evaluateConditionScore(
-            NumberSingleCondition<T> condition,
-            Map<String, Object> data) {
-        
-        // 获取条件配置的分数（如果没有设置，默认为1）
-        Integer conditionScore = condition.getScore();
-        if (conditionScore == null) {
-            conditionScore = 1;
-        }
-        
-        // 获取字段值
-        Object fieldValue = data.get(condition.getField());
-        if (fieldValue == null) {
-            return new NumberConditionEvaluateScoreResult(0.0, conditionScore.doubleValue());
-        }
-        
-        T compareValue = condition.getValue();
-        BigDecimal actualValue = toBigDecimal(fieldValue);
-        BigDecimal expectedValue = toBigDecimal(compareValue);
-        
-        if (actualValue == null || expectedValue == null) {
-            return new NumberConditionEvaluateScoreResult(0.0, conditionScore.doubleValue());
-        }
-        
-        // 判断是否满足条件
-        boolean satisfied = evaluateComparison(actualValue, expectedValue, condition.getOperator());
-        
-        if (satisfied) {
-            return new NumberConditionEvaluateScoreResult(conditionScore.doubleValue(), conditionScore.doubleValue());
-        } else {
-            return new NumberConditionEvaluateScoreResult(0.0, conditionScore.doubleValue());
-        }
-    }
-    
-    /**
-     * 执行数值比较
-     */
-    private static boolean evaluateComparison(BigDecimal actual, BigDecimal expected, CompareOperator operator) {
-        int compareResult = actual.compareTo(expected);
-        
-        switch (operator) {
-            case EQ: return compareResult == 0;
-            case NE: return compareResult != 0;
-            case GT: return compareResult > 0;
-            case GE: return compareResult >= 0;
-            case LT: return compareResult < 0;
-            case LE: return compareResult <= 0;
-            default:
-                throw new UnsupportedOperationException("Unsupported operator: " + operator);
-        }
     }
     
     /**
