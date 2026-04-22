@@ -5,9 +5,14 @@ import lombok.Data;
 
 /**
  * 单个条件
+ * @param <T> Number类型的子类，用于指定value的类型
  */
 @Data
 public class NumberSingleCondition<T extends Number> {
+	/**
+     * 默认的构造函数
+     */
+    public NumberSingleCondition() {} // NOSONAR
     /**
      * 字段名称
      */

@@ -22,6 +22,10 @@ public class NumberConditionExecutor {
     
     /**
      * 评估条件表达式是否满足（布尔模式）
+     * @param <T> Number子类
+     * @param expression 条件表达式
+     * @param data 数据
+     * @return data满足expression则返回true
      */
     public static <T extends Number> boolean evaluate(
             NumberConditionExpression<T> expression, 
@@ -107,9 +111,9 @@ public class NumberConditionExecutor {
     
     /**
      * 评估条件表达式并返回标准化分数（0-1）
-     * 
      * and分数相加，or分数取最大，not分数取理想最大得分-实际最大得分
      * 
+     * @param <T> Number的子类
      * @param expression 条件表达式
      * @param data 输入数据
      * @return 0-1之间的分数
@@ -125,6 +129,7 @@ public class NumberConditionExecutor {
     /**
      * 评估条件表达式并返回详细的评分结果
      * 
+     * @param <T> Number的子类
      * @param expression 条件表达式
      * @param data 输入数据
      * @return 包含得分、最高分、标准化分数的结果对象

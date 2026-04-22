@@ -1,13 +1,17 @@
 package io.github.cc53453.datatype.util;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import io.github.cc53453.datatype.enums.CompareOperator;
+import io.github.cc53453.datatype.model.NumberConditionExpressionModel;
+import io.github.cc53453.datatype.model.NumberSingleConditionModel;
 import io.github.cc53453.datatype.pojo.NumberConditionExpression;
 import lombok.extern.slf4j.Slf4j;
 
@@ -160,7 +164,13 @@ class NumberConditionBuilderAndExecutorTest {
         		NumberConditionBuilder.not(condition6part2, false, null)
         ), false, null);
         
-
+        Map.Entry<List<NumberConditionExpressionModel>, List<NumberSingleConditionModel>> entry = NumberConditionBuilder.flat(condition6);
+        Assertions.assertEquals("[NumberConditionExpressionModel(id=1, parentId=null, rootId=1, operator=AND, type=GROUP, score=null, scorable=false, sortOrder=0), NumberConditionExpressionModel(id=2, parentId=1, rootId=1, operator=OR, type=GROUP, score=null, scorable=false, sortOrder=1), NumberConditionExpressionModel(id=3, parentId=2, rootId=1, operator=AND, type=GROUP, score=10, scorable=true, sortOrder=1), NumberConditionExpressionModel(id=4, parentId=3, rootId=1, operator=null, type=CONDITION, score=null, scorable=false, sortOrder=1), NumberConditionExpressionModel(id=5, parentId=3, rootId=1, operator=null, type=CONDITION, score=null, scorable=false, sortOrder=2), NumberConditionExpressionModel(id=6, parentId=2, rootId=1, operator=AND, type=GROUP, score=20, scorable=true, sortOrder=2), NumberConditionExpressionModel(id=7, parentId=6, rootId=1, operator=null, type=CONDITION, score=null, scorable=false, sortOrder=1), NumberConditionExpressionModel(id=8, parentId=6, rootId=1, operator=null, type=CONDITION, score=null, scorable=false, sortOrder=2), NumberConditionExpressionModel(id=9, parentId=1, rootId=1, operator=NOT, type=GROUP, score=null, scorable=false, sortOrder=2), NumberConditionExpressionModel(id=10, parentId=9, rootId=1, operator=AND, type=GROUP, score=null, scorable=false, sortOrder=1), NumberConditionExpressionModel(id=11, parentId=10, rootId=1, operator=OR, type=GROUP, score=null, scorable=false, sortOrder=1), NumberConditionExpressionModel(id=12, parentId=11, rootId=1, operator=null, type=CONDITION, score=30, scorable=true, sortOrder=1), NumberConditionExpressionModel(id=13, parentId=11, rootId=1, operator=null, type=CONDITION, score=40, scorable=true, sortOrder=2), NumberConditionExpressionModel(id=14, parentId=10, rootId=1, operator=OR, type=GROUP, score=null, scorable=false, sortOrder=2), NumberConditionExpressionModel(id=15, parentId=14, rootId=1, operator=null, type=CONDITION, score=50, scorable=true, sortOrder=1), NumberConditionExpressionModel(id=16, parentId=14, rootId=1, operator=NOT, type=GROUP, score=60, scorable=true, sortOrder=2), NumberConditionExpressionModel(id=17, parentId=16, rootId=1, operator=null, type=CONDITION, score=null, scorable=false, sortOrder=1)]=[NumberSingleConditionModel(nodeId=4, field=age, operator=GT, value=18), NumberSingleConditionModel(nodeId=5, field=age, operator=LT, value=28), NumberSingleConditionModel(nodeId=7, field=age, operator=GE, value=38), NumberSingleConditionModel(nodeId=8, field=age, operator=LT, value=48), NumberSingleConditionModel(nodeId=12, field=sc, operator=GT, value=90), NumberSingleConditionModel(nodeId=13, field=sc, operator=LT, value=10), NumberSingleConditionModel(nodeId=15, field=level, operator=EQ, value=4), NumberSingleConditionModel(nodeId=17, field=level, operator=EQ, value=4)]", 
+        		entry.toString());
+        Assertions.assertEquals(condition6.toString(), 
+        		NumberConditionBuilder.toTreeByBigDecimal(entry.getKey(), entry.getValue()).toString());
+        
+        NumberConditionExpression<BigDecimal> condition7 = NumberConditionBuilder.toTreeByBigDecimal(entry.getKey(), entry.getValue());
         // ( (age > 18 AND age < 28, score=10) OR (age > 38 AND age < 48, score=20) ) AND
         // !( (sc>90,score=30 OR sc<10,score=40) AND (level=4,score=50 OR !(level==4),score=60) )
         // 得分0+（100-（0+50））=50分
@@ -169,11 +179,11 @@ class NumberConditionBuilderAndExecutorTest {
         candidate3.put("sc", 90);
         candidate3.put("level", 4);
         Assertions.assertFalse(NumberConditionExecutor.evaluate(
-        		condition6, candidate3));
+        		condition7, candidate3));
         Assertions.assertEquals(0.4166666666666667, NumberConditionExecutor.evaluateScore(
-        		condition6, candidate3));
+        		condition7, candidate3));
         // 外面再取一个大NOT
-        NumberConditionExpression<Integer> condition6not = NumberConditionBuilder.not(condition6, false, null);
+        NumberConditionExpression<BigDecimal> condition6not = NumberConditionBuilder.not(condition7, false, null);
         Assertions.assertTrue(NumberConditionExecutor.evaluate(
         		condition6not, candidate3));
         Assertions.assertEquals(0.5833333333333334, NumberConditionExecutor.evaluateScore(
@@ -187,12 +197,12 @@ class NumberConditionBuilderAndExecutorTest {
         candidate4.put("sc", 91);
         candidate4.put("level", 3);
         Assertions.assertEquals(0.16666666666666666, NumberConditionExecutor.evaluateScore(
-                condition6, candidate4));
+        		condition7, candidate4));
         
         // 测试null的情况
         // 得分0+(100-(0+60))=40
         Map<String, Object> candidate5 = new HashMap<>();
         Assertions.assertEquals(0.3333333333333333, NumberConditionExecutor.evaluateScore(
-                condition6, candidate5));
+        		condition7, candidate5));
 	}
 }

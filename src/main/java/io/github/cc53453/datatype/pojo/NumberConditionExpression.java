@@ -8,10 +8,15 @@ import io.github.cc53453.datatype.enums.LogicalOperator;
 
 /**
  * 条件表达式 - 支持任意嵌套的逻辑组合
+ * @param <T> Number类型的子类，用于指定单个条件中比较的value的类型
  */
 @Data
 public class NumberConditionExpression<T extends Number> {
-    
+
+	/**
+     * 默认的构造函数
+     */
+    public NumberConditionExpression() {} // NOSONAR
     /**
      * 逻辑操作符：AND, OR, NOT
      * 当type为CONDITION时，此字段无效

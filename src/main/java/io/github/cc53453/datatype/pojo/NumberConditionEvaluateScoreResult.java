@@ -7,10 +7,24 @@ import lombok.Data;
  */
 @Data
 public class NumberConditionEvaluateScoreResult {
-    private final Double score;      // 实际得分
-    private final Double maxScore;   // 最高可能得分
-    private final Double normalizedScore; // 标准化得分 (0-1)
+	/**
+	 * 实际得分
+	 */
+    private final Double score;
+    /**
+     *  最高可能得分
+     */
+    private final Double maxScore;
+    /**
+     *  标准化得分 (0-1)
+     */
+    private final Double normalizedScore;
     
+    /**
+     * 构造函数
+     * @param score 实际得分
+     * @param maxScore 理论最高分
+     */
     public NumberConditionEvaluateScoreResult(Double score, Double maxScore) {
         this.score = score;
         this.maxScore = maxScore;
@@ -23,6 +37,7 @@ public class NumberConditionEvaluateScoreResult {
     
     /**
      * 获取0-100的整数分数
+     * @return 标准化到0~1的分数*100后去尾
      */
     public int getScore100() {
         Double score100=normalizedScore*100;

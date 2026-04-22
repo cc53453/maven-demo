@@ -1,21 +1,32 @@
 package io.github.cc53453.datatype.enums;
 
+/**
+ * 条件表达式操作符
+ */
 public enum CompareOperator {
-    EQ("="),
-    NE("<>"),
-    LT("<"),
-    LE("<="),
-    GT(">"),
-    GE(">="),
+	/**
+	 * 等于
+	 */
+    EQ,
+    /**
+     * 不等于
+     */
+    NE,
+    /**
+     * 小于
+     */
+    LT,
+    /**
+     * 小于等于
+     */
+    LE,
+    /**
+     * 大于
+     */
+    GT,
+    /**
+     * 大于等于
+     */
+    GE,
     ;
-    
-    private final String symbol;
-    
-    CompareOperator(String symbol) {
-        this.symbol = symbol;
-    }
-    
-    public String getSymbol() {
-        return symbol;
-    }
 }
