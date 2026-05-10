@@ -144,7 +144,7 @@ public class NumberConditionBuilder {
     private static <T extends Number> void DSF( // NOSONAR
             NumberConditionExpression<T> node,
             Long parentId,
-            Long rootId,
+            Long treeId,
             List<NumberConditionExpressionModel> expressions,
             List<NumberSingleConditionModel> singles,
             AtomicLong idGenerator) {
@@ -156,7 +156,7 @@ public class NumberConditionBuilder {
         NumberConditionExpressionModel model = new NumberConditionExpressionModel();
         model.setId(currentId);
         model.setParentId(parentId);
-        model.setRootId(rootId);
+        model.setTreeId(treeId);
         model.setOperator(node.getOperator());
         model.setType(node.getType());
         model.setScore(node.getScore());
@@ -171,6 +171,7 @@ public class NumberConditionBuilder {
             if (cond != null) {
                 NumberSingleConditionModel single = new NumberSingleConditionModel();
                 single.setNodeId(currentId);
+                single.setTreeId(treeId);
                 single.setField(cond.getField());
                 single.setOperator(cond.getOperator());
                 single.setValue(cond.getValue() == null ? null : cond.getValue().toString());
@@ -188,7 +189,7 @@ public class NumberConditionBuilder {
                 // 递归前先生成 childId（为了设置 sortOrder）
                 Long childId = idGenerator.get();
 
-                DSF(child, currentId, rootId, expressions, singles, idGenerator);
+                DSF(child, currentId, treeId, expressions, singles, idGenerator);
 
                 // 设置 child 的 sortOrder
                 // 因为 child 已经被加进 expressions 了，需要回填
@@ -206,7 +207,7 @@ public class NumberConditionBuilder {
 
             Long childId = idGenerator.get();
 
-            DSF(node.getNotExpression(), currentId, rootId, expressions, singles, idGenerator);
+            DSF(node.getNotExpression(), currentId, treeId, expressions, singles, idGenerator);
 
             // NOT 只有一个 child，sortOrder = 1
             for (NumberConditionExpressionModel e : expressions) {

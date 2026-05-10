@@ -13,6 +13,7 @@ public class NumberSingleConditionModel {
      */
     public NumberSingleConditionModel() {} // NOSONAR
 	private Long nodeId;
+	private Long treeId;
     private String field;
     private CompareOperator operator;
     /**

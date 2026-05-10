@@ -15,7 +15,7 @@ public class NumberConditionExpressionModel {
     public NumberConditionExpressionModel() {} // NOSONAR
 	private Long id;
 	private Long parentId;
-	private Long rootId;
+	private Long treeId;
 	private LogicalOperator operator;
 	private ExpressionType type;
     private Integer score;
