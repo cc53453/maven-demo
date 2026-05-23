@@ -3,11 +3,13 @@ package io.github.cc53453.datatype.util;
 import java.util.*;
 
 import io.github.cc53453.datatype.pojo.TreeNode;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 基于AVL自平衡二叉搜索树算法的排序列表
  * @param <T> 泛型
  */
+@Slf4j
 public class SortedListByAVLTree<T> {
     private TreeNode<T> root;
     /**
@@ -74,10 +76,10 @@ public class SortedListByAVLTree<T> {
      */
     private TreeNode<T> rotateRight(TreeNode<T> y) {
         TreeNode<T> x = y.getLeft();
-        TreeNode<T> T2 = x.getRight();
+        TreeNode<T> t2 = x.getRight();
 
         x.setRight(y);
-        y.setLeft(T2);
+        y.setLeft(t2);
 
         updateHeight(y);
         updateHeight(x);
@@ -106,10 +108,10 @@ public class SortedListByAVLTree<T> {
      */
     private TreeNode<T> rotateLeft(TreeNode<T> x) {
         TreeNode<T> y = x.getRight();
-        TreeNode<T> T2 = y.getLeft();
+        TreeNode<T> t2 = y.getLeft();
 
         y.setLeft(x);
-        x.setRight(T2);
+        x.setRight(t2);
 
         updateHeight(x);
         updateHeight(y);
@@ -415,12 +417,12 @@ public class SortedListByAVLTree<T> {
      */
     private void printTreeVertical(TreeNode<T> node, String prefix, boolean isTail) {
         if (node == null) {
-            System.out.println(prefix + (isTail ? "└── " : "├── ") + "null");
+            log.info(prefix + (isTail ? "└── " : "├── ") + "null");
             return;
         }
         
         // 打印当前节点
-        System.out.println(prefix + (isTail ? "└── " : "├── ") 
+        log.info(prefix + (isTail ? "└── " : "├── ") 
             + node.getValue() + "(c=" + node.getCount() + ",h=" + node.getHeight() + ")");
         
         // 打印子节点
@@ -431,14 +433,14 @@ public class SortedListByAVLTree<T> {
             if (node.getLeft() != null) {
                 printTreeVertical(node.getLeft(), childPrefix, node.getRight() == null);
             } else if (node.getRight() != null) {
-                System.out.println(childPrefix + "├── null");
+                log.info(childPrefix + "├── null");
             }
             
             // 再打印右子树
             if (node.getRight() != null) {
                 printTreeVertical(node.getRight(), childPrefix, true);
             } else if (node.getLeft() != null) {
-                System.out.println(childPrefix + "└── null");
+                log.info(childPrefix + "└── null");
             }
         }
     }
