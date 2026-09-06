@@ -6,13 +6,10 @@ import java.util.function.Function;
 
 import org.springframework.util.Assert;
 
-import lombok.RequiredArgsConstructor;
-
 /**
  * 获取列表中某字段最大最小所处index的工具
  * @param <T> 泛型，一般是DTO、Model、POJO等
  */
-@RequiredArgsConstructor
 public class ListMinMaxHelper<T> {
 	/** 
     * 原始数据 
@@ -26,6 +23,23 @@ public class ListMinMaxHelper<T> {
     * 找到哪结束，包含
     */
    private final Integer to;
+   
+   /**
+    * 构造函数
+    * @param source 原始数据列表
+    * @param from 从哪开始找，包含
+    * @param to 找到哪结束，包含
+    */
+   public ListMinMaxHelper(List<T> source, Integer from, Integer to) {
+	   Assert.notNull(source, "source list must not be null");
+	   Assert.notEmpty(source, "source list must not be empty");
+	   Assert.isTrue(from >= 0 && from < source.size(), "from index out of bounds");
+	   Assert.isTrue(to >= 0 && to < source.size(), "to index out of bounds");
+	   Assert.isTrue(from <= to, "from index must be less than or equal to to index");
+	   this.source = source;
+	   this.from = from;
+	   this.to = to;
+   }
    
    /**
     * 获取列表中某字段(BigDecimal类型)最小值所处的index
@@ -65,7 +79,5 @@ public class ListMinMaxHelper<T> {
    
    private void checkValid(Function<T, BigDecimal> keyExtractor) {
 	   Assert.notNull(keyExtractor, "keyExtractor must not be null");
-	   Assert.notNull(source, "source list must not be null");
-	   Assert.notEmpty(source, "source list must not be empty");
    }
 }

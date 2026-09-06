@@ -45,7 +45,7 @@ class JobWithMockReaderTest {
         // mock read() 方法，每次返回数组中的一个元素，读完返回 null
         when(reader.read()).thenAnswer(invocation -> {
             int i = index.getAndIncrement();
-            if(i<50) {
+            if(i<10) {
                 return "a".concat(String.valueOf(i));
             }
             return null;

@@ -92,6 +92,15 @@ public class ExcelReaderWriter implements AutoCloseable {
     }
 
     /**
+     * 在当前行下新建一行
+     */
+    public Row createNewRow() {
+        sheet.createRow(currentRowIndex);
+        currentRow = sheet.getRow(currentRowIndex++);
+        return currentRow;
+    }
+
+    /**
 	 * 获取当前行指定列的字符串值
 	 * @param colIndex 列索引（0-based）
 	 * @return 单元格的字符串值，如果单元格为空则返回null
