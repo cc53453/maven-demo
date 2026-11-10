@@ -10,10 +10,9 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * yaml读写工具
@@ -48,22 +47,34 @@ public final class YamlUtil {
         }
         return false;
     }
-    
+
     /**
      * 读取 YAML 文件并返回为 json。
      * @param filePath 配置文件路径
+     * @param charset 字符集
      * @return 配置文件的内容
      */
-    public static JsonNode loadYaml(String filePath) {
+    public static JsonNode loadYaml(String filePath, Charset charset) {
         JsonMapper mapper = JsonMapper.builder()
                 .enable(SerializationFeature.INDENT_OUTPUT) // 美化输出
                 .build();
-        try (InputStream inputStream = new FileInputStream(filePath)) {
-            return mapper.valueToTree(new Yaml().load(inputStream));
+
+        try (InputStreamReader reader = new InputStreamReader(
+                new FileInputStream(filePath), charset)) {
+            return mapper.valueToTree(new Yaml().load(reader));
         } catch (IOException e) {
             log.error("read file error: {}, {}", filePath, e.getMessage());
         }
         return mapper.nullNode();
+    }
+
+    /**
+     * 读取 YAML 文件并返回为 json。默认是utf8
+     * @param filePath 配置文件路径
+     * @return 配置文件的内容
+     */
+    public static JsonNode loadYaml(String filePath) {
+        return loadYaml(filePath, StandardCharsets.UTF_8);
     }
 
     /**
